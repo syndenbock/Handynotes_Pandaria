@@ -16,8 +16,9 @@ libraries\AceEvent-3.0\AceEvent-3.0.xml
 # addon files
 HandyNotes_Pandaria.lua
 data\rares.lua
-data\achievements.lua
+data\mounts.lua
 data\toys.lua
+data\achievements.lua
 data\nodes.lua
 modules\node_validation.lua
 modules\handynotes_integration.lua

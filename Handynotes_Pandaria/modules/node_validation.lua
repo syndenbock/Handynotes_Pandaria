@@ -11,7 +11,7 @@ local function updateRareInfo (info, nodeData)
   local rareData = rareInfo[rareId];
 
   if (rareData == nil) then
-    print('No data about rare', rareId);
+    --print('No data about rare', rareId);
   else
     local toyList = rareData.toys;
     local achievementList = rareData.achievements;
@@ -19,7 +19,9 @@ local function updateRareInfo (info, nodeData)
     if (toyList ~= nil) then
       for x = 1, #toyList, 1 do
         if (not PlayerHasToy(toyList[x])) then
+          print('toy', rareId);
           info.display = true;
+          info.icon = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconGreen.tga';
           -- @TODO fill in toy information
         end
       end
@@ -38,7 +40,9 @@ local function updateRareInfo (info, nodeData)
           local completed = criteriaInfo[3];
 
           if (not completed) then
+            --print('achieve', rareId);
             info.display = true;
+            info.icon = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconYellow.tga';
             -- @TODO fill in achievement information
           end
         end
@@ -56,14 +60,16 @@ local function updateTreasureInfo (info, nodeData)
 
   if (not completed) then
     info.display = true;
+    info.icon = 'Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS';
     -- @TODO fill in treasure information
   end
 end
 
-function addon:getNodeInfo(coords, nodeData)
+function addon:getNodeInfo(nodeData)
   local info = {};
   info.display = false;
 
+  --print(nodeData.rare);
   updateRareInfo(info, nodeData);
   updateTreasureInfo(info, nodeData);
 
