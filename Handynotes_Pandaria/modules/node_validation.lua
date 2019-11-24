@@ -3,6 +3,13 @@ local addonName, shared = ...;
 local addon = shared.addon;
 local rareInfo = shared.rareInfo;
 
+local function getToyIcon (toyId)
+  local info = {GetItemInfo(toyId)};
+  local icon = info[10];
+
+  return icon;
+end
+
 local function updateRareInfo (info, nodeData)
   local rareId = nodeData.rare;
 
@@ -18,10 +25,12 @@ local function updateRareInfo (info, nodeData)
 
     if (toyList ~= nil) then
       for x = 1, #toyList, 1 do
-        if (not PlayerHasToy(toyList[x])) then
-          print('toy', rareId);
+        local toy = toyList[x];
+
+        if (not PlayerHasToy(toy)) then
+          --print('toy', rareId);
           info.display = true;
-          info.icon = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconGreen.tga';
+          info.icon = getToyIcon(toy) or 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconGreen.tga';
           -- @TODO fill in toy information
         end
       end
@@ -42,7 +51,7 @@ local function updateRareInfo (info, nodeData)
           if (not completed) then
             --print('achieve', rareId);
             info.display = true;
-            info.icon = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconYellow.tga';
+            info.icon = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIcon.tga';
             -- @TODO fill in achievement information
           end
         end

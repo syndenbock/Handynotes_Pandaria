@@ -6,84 +6,7 @@ local nodes = shared.nodes;
 
 local handler = {};
 
--- This is a custom iterator we use to iterate over every node in a given zone
-local function iter (table, coords)
-  if (table == nil) then return end
-
-  local zones = table.zones;
-  local zoneIndex = table.zoneIndex;
-  local zone;
-
-  if (zoneIndex == nil) then
-    zoneIndex, zone = next(zones, nil);
-    table.zoneIndex = zoneIndex;
-  end
-
-  if true then return end
-
-  while zone do
-    local zoneNodes = nodes[zone];
-
-    if (zoneNodes) then
-      local node;
-
-      coords, node = next(zoneNodes, coords);
-
-      while (coords) do
-        local info = addon:getNodeInfo(node);
-
-        --if (info.display) then
-        --  return coords, zone, 'Interface\\Addons\\HandyNotes_PandariaTreasures\\Artwork\\RareIcon.tga', 1, 1
-        --end
-      end
-    end
-
-    zoneIndex, zone = next(zones, zoneIndex);
-    table.zoneIndex = zoneIndex;
-    coords = nil;
-  end
-
-  --if value then
-  --  local info = addon:getNodeInfo(state, value);
-  --  if (info.display) then
-  --    return state, zone, 'Interface\\Addons\\HandyNotes_PandariaTreasures\\Artwork\\RareIcon.tga', 1, 1
-  --  end
-  --end
-end
-
--- This is a funky custom iterator we use to iterate over every zone's nodes
--- in a given continent + the continent itself
-local function iterCont (table, prestate)
-  if (table == nil) then return end
-
-  local zone = t.C[t.Z]
-  local data = nodes[zone]
-  local state, value
-
-  while zone do
-    if data then -- Only if there is data for this zone
-      state, value = next(data, prestate)
-      while state do -- Have we reached the end of this zone?
-        if value.cont or zone == t.contId then -- Show on continent?
-          local info = addon:getNodeInfo(state, value);
-          if (info.display) then
-            return state, zone, 'Interface\\Addons\\HandyNotes_PandariaTreasures\\Artwork\\RareIcon.tga', 1, 1
-          end
-        end
-        state, value = next(data, state) -- Get next data
-      end
-    end
-    -- Get next zone
-    t.Z = next(t.C, t.Z)
-    zone = t.C[t.Z]
-    data = nodes[zone]
-    prestate = nil
-  end
-  wipe(t)
-  tablepool[t] = true
-end
-
-local function makeIterator (zones)
+local function makeIterator (zones, isMinimap)
   local zoneIndex = next(zones, nil);
   local zone = zones[zoneIndex];
   local coords;
@@ -119,28 +42,15 @@ local function makeIterator (zones)
   return iterator;
 end
 
-function handler:GetNodes2(uiMapId, minimap)
-  local zones = HandyNotes:GetContinentZoneList(uiMapId) -- Is this a continent?
+function handler:GetNodes2(uiMapId, isMinimap)
+  --local zones = HandyNotes:GetContinentZoneList(uiMapId) -- Is this a continent?
+  local zones;
 
   if not zones then
     zones = {uiMapId}
   end
 
-  return makeIterator(zones);
-
-  --local tbl = next(tablepool) or {}
-  --
-  --  tablepool[tbl] = nil
-  --  tbl.C = C
-  --  tbl.Z = next(C)
-  --  tbl.contId = uiMapId
-  --  return iterCont, tbl, nil
-  --else -- It is a zone
-  --  local tbl = next(tablepool) or {}
-  --  tablepool[tbl] = nil
-  --  tbl.data = nodes[uiMapId] or {}
-  --  return iter, tbl, nil
-  --end
+  return makeIterator(zones, isMinimap);
 end
 
 function handler:OnEnter(uiMapId, coords)
