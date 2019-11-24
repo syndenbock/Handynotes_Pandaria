@@ -1,0 +1,26 @@
+## Interface: 80250
+## Title: Handynotes Pandaria
+## Version: 1.0
+## Notes: Shows locations of treasures and rares in Pandaria
+## Author: syndenbock
+## RequiredDeps: HandyNotes
+## SavedVariables: convertedData
+
+# libraries
+
+libraries\LibStub\LibStub.lua
+libraries\CallbackHandler-1.0\CallbackHandler-1.0.xml
+libraries\AceAddon-3.0\AceAddon-3.0.xml
+libraries\AceEvent-3.0\AceEvent-3.0.xml
+
+# addon files
+HandyNotes_Pandaria.lua
+data\rares.lua
+data\achievements.lua
+data\toys.lua
+data\nodes.lua
+modules\node_validation.lua
+modules\handynotes_integration.lua
+
+# tools
+tools\convert.lua
