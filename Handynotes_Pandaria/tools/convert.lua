@@ -184,6 +184,5 @@ addon:RegisterEvent('PLAYER_LOGIN', function ()
     end
   end
 
-  print(convertedNodes);
   convertedData = convertedNodes;
 end);

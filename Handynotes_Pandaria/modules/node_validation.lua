@@ -84,7 +84,7 @@ local function updateRareInfo (info, nodeData)
   local rareData = rareInfo[rareId];
 
   if (rareData == nil) then
-    --print('No data about rare', rareId);
+    print('No data about rare', rareId);
     return
   end
 
