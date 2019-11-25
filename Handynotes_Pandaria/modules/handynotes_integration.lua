@@ -77,9 +77,9 @@ function handler:OnEnter(uiMapId, coords)
     tooltip:AddLine(node.info.description);
   end
 
-  for x = 1, #node.info.text, 1 do
-    tooltip:AddLine(node.info.text[x]);
-  end
+--  for x = 1, #node.info.text, 1 do
+--    tooltip:AddLine(node.info.text[x]);
+--  end
 
   tooltip:Show();
 end
