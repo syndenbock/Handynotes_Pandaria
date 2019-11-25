@@ -11,28 +11,22 @@ local ICON_MAP = {
   chest = 'Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS',
 };
 
+local COLOR_MAP = {
+  red = '|cFFFF0000',
+  blue = '|cFF0000FF',
+  green = '|cFF00FF00',
+  yellow = '|cFFFFFF00',
+};
+
+local function setTextColor (text, color)
+  return color .. text .. '|r';
+end
+
 local function getItemIcon (itemId)
   local info = {GetItemInfo(itemId)};
   local icon = info[10];
 
   return icon;
-end
-
-local function updateToyInfo (info, rareData)
-  local toyList = rareData.toys;
-
-  if (toyList == nil) then return end
-
-  for x = 1, #toyList, 1 do
-    local toy = toyList[x];
-
-    if (not PlayerHasToy(toy)) then
-      --print('toy', rareId);
-      info.display = true;
-      info.icon = getItemIcon(toy) or ICON_MAP.skullGreen;
-      -- @TODO fill in toy information
-    end
-  end
 end
 
 local function updateAchievementInfo (info, rareData)
@@ -44,29 +38,66 @@ local function updateAchievementInfo (info, rareData)
     local achievementData = achievementList[x];
     local achievementId = achievementData.id;
     local achievementInfo = {GetAchievementInfo(achievementId)};
+    local text = achievementInfo[2];
     local completed = achievementInfo[4];
+    local criteriaIndex = achievementData.index;
+    local numCriteria = GetAchievementNumCriteria(achievementId);
+    local fulfilled = false;
 
-    if (not completed) then
-      local criteriaIndex = achievementData.index;
-      local numCriteria = GetAchievementNumCriteria(achievementId);
-
-      -- some achievements and their indices are set statically, so we make
-      -- sure the criteria exists
-      if (criteriaIndex <= numCriteria) then
-        local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
-        local completed = criteriaInfo[3];
-
-        if (not completed) then
-          --print('achieve', rareId);
-          info.display = true;
-          info.icon = ICON_MAP.skullGray;
-          -- @TODO fill in achievement information
-        end
-      else
-        info.display = true;
-        info.icon = ICON_MAP.skullGray;
-      end
+    if (completed) then
+      text = setTextColor(text, COLOR_MAP.green);
+    else
+      text = setTextColor(text, COLOR_MAP.red);
     end
+
+    -- some achievements and their indices are set statically, so we make
+    -- sure the criteria exists
+    if (criteriaIndex <= numCriteria) then
+      local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
+      local criteria = criteriaInfo[1];
+
+      fulfilled = criteriaInfo[3];
+
+      if (fulfilled or completed) then
+        criteria = setTextColor(criteria, COLOR_MAP.green);
+      else
+        criteria = setTextColor(criteria, COLOR_MAP.red);
+      end
+
+      text = text .. ' - ' .. criteria;
+    end
+
+    if (not completed and not fulfilled) then
+      info.display = true;
+      info.icon = ICON_MAP.skullGray;
+    end
+
+    table.insert(info.text, text);
+  end
+end
+
+local function updateToyInfo (info, rareData)
+  local toyList = rareData.toys;
+
+  if (toyList == nil) then return end
+
+  for x = 1, #toyList, 1 do
+    local toy = toyList[x];
+    local toyInfo = {GetItemInfo(toy)};
+    local toyName = toyInfo[1];
+    local text = 'Toy: ';
+
+    if (PlayerHasToy(toy)) then
+      text = setTextColor(text, COLOR_MAP.green);
+    else
+      text = setTextColor(text, COLOR_MAP.red);
+      info.display = true;
+      info.icon = getItemIcon(toy) or ICON_MAP.skullGreen;
+      -- @TODO fill in toy information
+    end
+
+    text = text .. toyName;
+    table.insert(info.text, text);
   end
 end
 
@@ -78,12 +109,20 @@ local function updateMountInfo (info, rareData)
   for x = 1, #mountList, 1 do
     local mountId = mountList[x];
     local mountInfo = {C_MountJournal.GetMountInfoByID(mountId)};
+    local mountName = mountInfo[1];
     local collected = mountInfo[11];
+    local text = 'Mount: ';
 
-    if (not collected) then
+    if (collected) then
+      text = setTextColor(text, COLOR_MAP.green);
+    else
+      text = setTextColor(text, COLOR_MAP.red);
       info.display = true;
       info.icon = mountInfo[3] or ICON_MAP.skullOrange;
     end
+
+    text = text .. mountName;
+    table.insert(info.text, text);
   end
 end
 
@@ -122,10 +161,11 @@ local function updateTreasureInfo (info, nodeData)
 end
 
 function addon:getNodeInfo(nodeData)
-  local info = {};
+  local info = {
+    display = false,
+    text = {},
+  };
   local hasInfo = false;
-
-  info.display = false;
 
   --print(nodeData.rare);
 
