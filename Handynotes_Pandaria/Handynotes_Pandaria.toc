@@ -7,11 +7,7 @@
 ## SavedVariables: convertedData
 
 # libraries
-
 libraries\LibStub\LibStub.lua
-libraries\CallbackHandler-1.0\CallbackHandler-1.0.xml
-libraries\AceAddon-3.0\AceAddon-3.0.xml
-libraries\AceEvent-3.0\AceEvent-3.0.xml
 
 # addon files
 HandyNotes_Pandaria.lua

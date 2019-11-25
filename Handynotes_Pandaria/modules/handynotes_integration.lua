@@ -114,4 +114,6 @@ local options = {
   },
 }
 
-HandyNotes:RegisterPluginDB(addonName, handler, options)
+addon:on('PLAYER_LOGIN', function ()
+  HandyNotes:RegisterPluginDB(addonName, handler, options)
+end);

@@ -77,7 +77,7 @@ local function updateMountInfo (info, rareData)
 
     if (not collected) then
       info.display = true;
-      info.icon = getItemIcon(mountId);
+      info.icon = getItemIcon(mountId) or ICON_MAP.skullGreen;
     end
   end
 end

@@ -2,7 +2,7 @@ local addonName, shared = ...;
 
 local addon = shared.addon;
 
-addon:RegisterEvent('PLAYER_LOGIN', function ()
+addon:on('PLAYER_LOGIN', function ()
   local MAP_IDS = {
     jadeforest = 371,
     valleyoffourwinds = 376,

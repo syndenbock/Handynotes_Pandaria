@@ -1,5 +1,5 @@
-local addonName, addon = ...;
+local addonName, shared = ...;
 
-addon.rareInfo = {};
+shared.rareInfo = {};
 
-local rareInfo = addon.rareInfo;
+local rareInfo = shared.rareInfo;
