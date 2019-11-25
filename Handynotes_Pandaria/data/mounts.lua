@@ -3,11 +3,14 @@ local addonName, shared = ...;
 local rareInfo = shared.rareInfo;
 
 local mountMap = {
-  [94229] = 69769,
-  [94230] = 69769,
-  [94231] = 69769,
-  [90655] = 64403,
-  [104269] = 73167,
+  [473] = 60491,
+  [542] = 69099,
+  [533] = 69161,
+  [534] = 69769,
+  [535] = 69769,
+  [536] = 69769,
+  [517] = 64403,
+  [561] = 73167,
 };
 
 for mountId, rareId in pairs(mountMap) do
