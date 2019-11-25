@@ -2,6 +2,7 @@ local addonName, shared = ...;
 
 local addon = shared.addon;
 
+-- commented out achievements are manually linked, see below
 local achievementList = {
   7439, -- Glorious!
   7932, -- I'm in Your Base, Killing Your Dudes
