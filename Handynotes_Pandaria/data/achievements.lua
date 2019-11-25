@@ -48,7 +48,7 @@ addon:on('PLAYER_LOGIN', function ()
   end
 
   -- warscouts and warbringers are not properly returned in the achievement
-  -- Zul'Again
+  -- "Zul'Again"
   addAchievementInfo(69768, 8078, 1);
   addAchievementInfo(69769, 8078, 2);
 
@@ -56,4 +56,15 @@ addon:on('PLAYER_LOGIN', function ()
   -- returns no proper id
   addAchievementInfo(73174, 8103, 31);
   addAchievementInfo(73666, 8103, 31);
+
+  -- "I'm in your base, killing your dudes" has faction specific NPCs
+  if (UnitFactionGroup('player') == 'Alliance') then
+    addAchievementInfo(68321, 7932, 1);
+    addAchievementInfo(68320, 7932, 2);
+    addAchievementInfo(68322, 7932, 3);
+  else
+    addAchievementInfo(68318, 7932, 1);
+    addAchievementInfo(68317, 7932, 2);
+    addAchievementInfo(68319, 7932, 3);
+  end
 end);

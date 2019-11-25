@@ -6,6 +6,7 @@ local rareInfo = shared.rareInfo;
 local ICON_MAP = {
   skullGray = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIcon.tga',
   skullGreen = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconGreen.tga',
+  skullOrange = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconOrange.tga',
   chest = 'Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS',
 };
 
@@ -77,7 +78,7 @@ local function updateMountInfo (info, rareData)
 
     if (not collected) then
       info.display = true;
-      info.icon = getItemIcon(mountId) or ICON_MAP.skullGreen;
+      info.icon = getItemIcon(mountId) or ICON_MAP.skullOrange;
     end
   end
 end
