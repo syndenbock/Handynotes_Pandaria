@@ -12,6 +12,7 @@ libraries\LibStub\LibStub.lua
 # addon files
 HandyNotes_Pandaria.lua
 data\rares.lua
+data\treasures.lua
 data\mounts.lua
 data\toys.lua
 data\achievements.lua

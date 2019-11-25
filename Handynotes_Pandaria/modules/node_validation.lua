@@ -2,6 +2,7 @@ local addonName, shared = ...;
 
 local addon = shared.addon;
 local rareInfo = shared.rareInfo;
+local treasureInfo = shared.treasureInfo;
 
 local ICON_MAP = {
   question = 'Interface\\Icons\\inv_misc_questionmark',
@@ -41,8 +42,7 @@ local function updateAchievementInfo (info, rareData)
     local text = achievementInfo[2];
     local completed = achievementInfo[4];
     local criteriaIndex = achievementData.index;
-    local numCriteria = GetAchievementNumCriteria(achievementId);
-    local fulfilled = false;
+    local fulfilled;
 
     if (completed) then
       text = setTextColor(text, COLOR_MAP.green);
@@ -52,7 +52,8 @@ local function updateAchievementInfo (info, rareData)
 
     -- some achievements and their indices are set statically, so we make
     -- sure the criteria exists
-    if (criteriaIndex <= numCriteria) then
+    if (criteriaIndex > 0 and
+        criteriaIndex <= GetAchievementNumCriteria(achievementId)) then
       local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
       local criteria = criteriaInfo[1];
 
@@ -150,11 +151,30 @@ local function updateTreasureInfo (info, nodeData)
   if (treasureId == nil) then return false end
 
   local completed = IsQuestFlaggedCompleted(treasureId);
+  local treasureData = treasureInfo[treasureId];
+
+  if (treasureData == nil) then
+    print('no information about treasure:', treasureId);
+  else
+    info.name = treasureData.name;
+    info.description = treasureData.description;
+  end
 
   if (not completed) then
     info.display = true;
     info.icon = ICON_MAP.chest;
     -- @TODO fill in treasure information
+  end
+
+  local achievementInfo = {text = {}};
+  updateAchievementInfo(achievementInfo, treasureData);
+
+  if (achievementInfo ~= nil) then
+    for x = 1, #achievementInfo.text, 1 do
+      table.insert(info.text, achievementInfo.text[x]);
+    end
+  else
+    print(treasureData.achievements);
   end
 
   return true;

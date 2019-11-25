@@ -25,7 +25,7 @@ local function makeIterator (zones, isMinimap)
           else
             coords = nextCoords;
 
-          node.text = info.text;
+            node.info = info;
 
             if (info.display) then
               return coords, zone, info.icon, 1, 1;
@@ -71,10 +71,14 @@ function handler:OnEnter(uiMapId, coords)
     tooltip:SetOwner(self, "ANCHOR_RIGHT")
   end
 
-  tooltip:SetText(node.rare or node.treasure);
+  tooltip:SetText(node.info.name or node.rare or node.treasure);
 
-  for x = 1, #node.text, 1 do
-    tooltip:AddLine(node.text[x]);
+  if (node.info.description ~= nil) then
+    tooltip:AddLine(node.info.description);
+  end
+
+  for x = 1, #node.info.text, 1 do
+    tooltip:AddLine(node.info.text[x]);
   end
 
   tooltip:Show();
