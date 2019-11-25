@@ -3,15 +3,19 @@ local addonName, shared = ...;
 shared.rareInfo = {
   [60491] = {
     name = 'Sha of Anger',
+    quest = 32099,
   },
   [69099] = {
     name = 'Nalak',
+    quest = 32518,
   },
   [62346] = {
     name = 'Galleon',
+    quest = 32098,
   },
   [69161] = {
     name = 'Oondasta',
+    quest = 32519,
   },
   [64403] = {
     name = 'Alani',
@@ -20,10 +24,10 @@ shared.rareInfo = {
     name = 'Zandalari Warbringer',
   },
   [69768] = {
-    name = 'Zandalari Warscout'
+    name = 'Zandalari Warscout',
   },
   [66900] = {
-    name = 'Huggalon the Heart Watcher'
+    name = 'Huggalon the Heart Watcher',
   },
   [68320] = {
     name = 'Ubunti the Shade',

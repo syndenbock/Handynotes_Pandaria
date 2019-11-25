@@ -153,6 +153,10 @@ local function updateRareInfo (info, nodeData)
   updateToyInfo(info, rareData);
   updateMountInfo(info, rareData);
 
+  if (rareData.quest ~= nil and IsQuestFlaggedCompleted(rareData.quest)) then
+    info.display = false;
+  end
+
   return true;
 end
 

@@ -15,6 +15,11 @@ local MAP_IDS = {
 };
 
 shared.nodes = {
+  [MAP_IDS.isleofgiants] = {
+    [50605440] = {
+      ["rare"] = 69161,
+    },
+  },
   [MAP_IDS.timelessisle] = {
     [65605680] = {
       ["rare"] = 73167,
@@ -168,6 +173,9 @@ shared.nodes = {
     },
   },
   [MAP_IDS.isleofthunder] = {
+    [60503730] = {
+      ["rare"] = 69099,
+    },
     [55208770] = {
       ["rare"] = 69341,
     },
@@ -428,6 +436,9 @@ shared.nodes = {
     },
   },
   [MAP_IDS.valleyoffourwinds] = {
+    [71606440] = {
+      ["rare"] = 62346,
+    },
     [52802860] = {
       ["rare"] = 50766,
     },
@@ -573,6 +584,9 @@ shared.nodes = {
     },
   },
   [MAP_IDS.kunlai] = {
+    [54206330] = {
+      ["rare"] = 60491,
+    },
     [36607960] = {
       ["rare"] = 50733,
     },
