@@ -26,6 +26,7 @@ local toyMap = {
   [134023] = 50749,
   [90067] = 66900,
   [86565] = 51059,
+  [104329] = 72898,
 };
 
 for toyId, rareId in pairs(toyMap) do

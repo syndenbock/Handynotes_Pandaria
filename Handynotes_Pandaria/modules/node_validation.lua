@@ -46,14 +46,20 @@ local function updateAchievementInfo (info, rareData)
 
     if (not completed) then
       local criteriaIndex = achievementData.index;
-      local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
-      local completed = criteriaInfo[3];
+      local numCriteria = GetAchievementNumCriteria(achievementId);
 
-      if (not completed) then
-        --print('achieve', rareId);
-        info.display = true;
-        info.icon = ICON_MAP.skullGray;
-        -- @TODO fill in achievement information
+      -- some achievements and their indices are set statically, so we make
+      -- sure the criteria exists
+      if (criteriaIndex <= numCriteria) then
+        local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
+        local completed = criteriaInfo[3];
+
+        if (not completed) then
+          --print('achieve', rareId);
+          info.display = true;
+          info.icon = ICON_MAP.skullGray;
+          -- @TODO fill in achievement information
+        end
       end
     end
   end
