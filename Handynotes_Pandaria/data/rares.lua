@@ -31,27 +31,27 @@ shared.rareInfo = {
   },
   [68320] = {
     name = 'Ubunti the Shade',
-    faction = 'Horde',
+    faction = 'Alliance',
   },
   [68321] = {
     name = 'Kar Warmaker',
-    faction = 'Horde',
+    faction = 'Alliance',
   },
   [68322] = {
     name = 'Muerta',
-    faction = 'Horde',
+    faction = 'Alliance',
   },
   [68317] = {
     name = 'Mavis Harms',
-    faction = 'Alliance',
+    faction = 'Horde',
   },
   [68318] = {
     name = 'Dalan Nightbreaker',
-    faction = 'Alliance',
+    faction = 'Horde',
   },
   [68319] = {
     name = 'Disha Fearwarden',
-    faction = 'Alliance',
+    faction = 'Horde',
   },
 };
 
