@@ -90,26 +90,25 @@ end
 local function updateRareInfo (info, nodeData)
   local rareId = nodeData.rare;
 
-  if (rareId == nil) then return end
+  if (rareId == nil) then return false end
 
   local rareData = rareInfo[rareId];
 
   if (rareData == nil) then
---    print('No data about rare', rareId);
---    info.display = true;
---    info.icon = ICON_MAP.question;
-    return;
+    return false;
   end
 
   updateAchievementInfo(info, rareData);
   updateToyInfo(info, rareData);
   updateMountInfo(info, rareData);
+
+  return true;
 end
 
 local function updateTreasureInfo (info, nodeData)
   local treasureId = nodeData.treasure;
 
-  if (treasureId == nil) then return end
+  if (treasureId == nil) then return false end
 
   local completed = IsQuestFlaggedCompleted(treasureId);
 
@@ -118,15 +117,24 @@ local function updateTreasureInfo (info, nodeData)
     info.icon = ICON_MAP.chest;
     -- @TODO fill in treasure information
   end
+
+  return true;
 end
 
 function addon:getNodeInfo(nodeData)
   local info = {};
+  local hasInfo = false;
+
   info.display = false;
 
   --print(nodeData.rare);
-  updateRareInfo(info, nodeData);
-  updateTreasureInfo(info, nodeData);
+
+  hasInfo = hasInfo or updateRareInfo(info, nodeData);
+  hasInfo = hasInfo or updateTreasureInfo(info, nodeData);
+
+  if (not hasInfo) then
+    return nil;
+  end
 
   return info;
 end

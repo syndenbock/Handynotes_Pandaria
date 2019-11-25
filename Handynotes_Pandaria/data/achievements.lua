@@ -39,10 +39,10 @@ addon:on('PLAYER_LOGIN', function ()
       local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, y)};
       local rareId = criteriaInfo[8];
 
-      -- this is for detecting unhandled rares
-      if (rareId == nil or rareId == 0) then
-        print(y, criteriaInfo[1], '-', rareId);
-      end
+      -- -- this is for detecting unhandled rares
+      -- if (rareId == nil or rareId == 0) then
+      --   print(y, criteriaInfo[1], '-', rareId);
+      -- end
 
       addAchievementInfo(rareId, achievementId, y);
     end

@@ -7,8 +7,7 @@ local nodes = shared.nodes;
 local handler = {};
 
 local function makeIterator (zones, isMinimap)
-  local zoneIndex = next(zones, nil);
-  local zone = zones[zoneIndex];
+  local zoneIndex, zone = next(zones, nil);
   local coords;
 
   local function iterator ()
@@ -16,22 +15,22 @@ local function makeIterator (zones, isMinimap)
       local zoneNodes = nodes[zone];
 
       if (zoneNodes) then
-        local node;
-
-        coords, node = next(zoneNodes, coords);
+        local nextCoords, node = next(zoneNodes, coords);
 
         while (node) do
           local info = addon:getNodeInfo(node);
 
-          if (info.display) then
-            --for key, value in pairs(info) do
-            --  print(key, ' - ', value);
-            --end
+          if (info == nil) then
+            zoneNodes[nextCoords] = nil;
+          else
+            coords = nextCoords;
 
-            return coords, zone, info.icon, 1, 1;
+            if (info.display) then
+              return coords, zone, info.icon, 1, 1;
+            end
           end
 
-          coords, node = next(zoneNodes, coords);
+          nextCoords, node = next(zoneNodes, coords);
         end
       end
 
