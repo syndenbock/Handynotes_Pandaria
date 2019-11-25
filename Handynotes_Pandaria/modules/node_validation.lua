@@ -4,6 +4,7 @@ local addon = shared.addon;
 local rareInfo = shared.rareInfo;
 
 local ICON_MAP = {
+  question = 'Interface\\Icons\\inv_misc_questionmark',
   skullGray = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIcon.tga',
   skullGreen = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconGreen.tga',
   skullOrange = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconOrange.tga',
@@ -61,6 +62,9 @@ local function updateAchievementInfo (info, rareData)
           info.icon = ICON_MAP.skullGray;
           -- @TODO fill in achievement information
         end
+      else
+        info.display = true;
+        info.icon = ICON_MAP.skullGray;
       end
     end
   end
@@ -92,7 +96,9 @@ local function updateRareInfo (info, nodeData)
 
   if (rareData == nil) then
     print('No data about rare', rareId);
-    return
+    info.display = true;
+    info.icon = ICON_MAP.question;
+    return;
   end
 
   updateAchievementInfo(info, rareData);

@@ -5,11 +5,12 @@ local addon = shared.addon;
 local achievementList = {
   7439, -- Glorious!
   7932, -- I'm in Your Base, Killing Your Dudes
-  --8078, -- Zul'Again
-  8101, -- It Was Worth Every Ritual Stone
+  -- 8078, -- Zul'Again
+  -- 8101, -- It Was Worth Every Ritual Stone
   8103, -- Champions of Lei-Shen
   8712, -- Killing Time
   8714, -- Timeless Champion
+  32640, -- Champions of the Thunder King
 };
 
 local rareInfo = shared.rareInfo;
@@ -29,7 +30,6 @@ end
 
 -- make sure achievement data is available
 addon:on('PLAYER_LOGIN', function ()
-  print('achieve!');
   for x = 1, #achievementList, 1 do
     local achievementId = achievementList[x];
     local numCriteria  = GetAchievementNumCriteria(achievementId);
@@ -38,10 +38,10 @@ addon:on('PLAYER_LOGIN', function ()
       local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, y)};
       local rareId = criteriaInfo[8];
 
---      -- this is for detecting unhandled rares
---      if (rareId == nil or rareId == 0) then
---        print(y, criteriaInfo[1], '-', rareId);
---      end
+      -- this is for detecting unhandled rares
+      if (rareId == nil or rareId == 0) then
+        print(y, criteriaInfo[1], '-', rareId);
+      end
 
       addAchievementInfo(rareId, achievementId, y);
     end
@@ -67,4 +67,15 @@ addon:on('PLAYER_LOGIN', function ()
     addAchievementInfo(68317, 7932, 2);
     addAchievementInfo(68319, 7932, 3);
   end
+
+  -- "It Was Worth Every Ritual Stone" for some reason returns weird assetIds
+  addAchievementInfo(69471, 8101, 1);
+  addAchievementInfo(69633, 8101, 2);
+  addAchievementInfo(69341, 8101, 3);
+  addAchievementInfo(69339, 8101, 4);
+  addAchievementInfo(69749, 8101, 5);
+  addAchievementInfo(69767, 8101, 6);
+  addAchievementInfo(70080, 8101, 7);
+  addAchievementInfo(69396, 8101, 8);
+  addAchievementInfo(69347, 8101, 9);
 end);
