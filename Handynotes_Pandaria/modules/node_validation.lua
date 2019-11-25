@@ -3,6 +3,7 @@ local addonName, shared = ...;
 local addon = shared.addon;
 local rareInfo = shared.rareInfo;
 local treasureInfo = shared.treasureInfo;
+local playerFaction;
 
 local ICON_MAP = {
   question = 'Interface\\Icons\\inv_misc_questionmark',
@@ -18,6 +19,10 @@ local COLOR_MAP = {
   green = '|cFF00FF00',
   yellow = '|cFFFFFF00',
 };
+
+addon:on('PLAYER_LOGIN', function ()
+  playerFaction = UnitFactionGroup('player');
+end);
 
 local function setTextColor (text, color)
   return color .. text .. '|r';
@@ -138,6 +143,12 @@ local function updateRareInfo (info, nodeData)
     return false;
   end
 
+  if (rareData.faction and rareData.faction ~= playerFaction) then
+    return false;
+  end
+
+  info.name = rareData.name;
+
   updateAchievementInfo(info, rareData);
   updateToyInfo(info, rareData);
   updateMountInfo(info, rareData);
@@ -150,15 +161,20 @@ local function updateTreasureInfo (info, nodeData)
 
   if (treasureId == nil) then return false end
 
-  local completed = IsQuestFlaggedCompleted(treasureId);
   local treasureData = treasureInfo[treasureId];
 
   if (treasureData == nil) then
     print('no information about treasure:', treasureId);
   else
+    if (treasureData.faction and treasureData.faction ~= playerFaction) then
+      return false;
+    end
+
     info.name = treasureData.name;
     info.description = treasureData.description;
   end
+
+  local completed = IsQuestFlaggedCompleted(treasureId);
 
   if (not completed) then
     info.display = true;

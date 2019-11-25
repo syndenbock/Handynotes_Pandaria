@@ -22,7 +22,21 @@ local function addTreasureAchievementInfo (treasureId, achievementId, criteriaIn
 end
 
 local function addRareAchievementInfo (rareId, achievementId, criteriaIndex)
+  local rareData;
+
   addAchievementInfo(rareInfo, rareId, achievementId, criteriaIndex);
+
+  rareData = rareInfo[rareId];
+
+  if (rareData.name == nil and criteriaIndex > 0) then
+    local numCriteria = GetAchievementNumCriteria(achievementId);
+
+    if (numCriteria >= criteriaIndex) then
+      local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
+
+      rareData.name = criteriaInfo[1];
+    end
+  end
 end
 
 do
@@ -101,8 +115,8 @@ addon:on('PLAYER_LOGIN', function ()
 
   -- there are two npcs named "Archiereus of Flame" and therefor the Achievement
   -- returns no proper id
-  addRareAchievementInfo(73174, 8103, 31);
-  addRareAchievementInfo(73666, 8103, 31);
+  addRareAchievementInfo(73174, 8714, 31);
+  addRareAchievementInfo(73666, 8714, 31);
 
   -- "I'm in your base, killing your dudes" has faction specific NPCs
   if (UnitFactionGroup('player') == 'Alliance') then

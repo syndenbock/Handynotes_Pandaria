@@ -6,32 +6,28 @@ local nodes = shared.nodes;
 
 --if true then return end
 
-addon:on('PLAYER_STOPPED_MOVING', function ()
-  local rares = {};
-
-  for rareId, data in pairs(rareInfo) do
-    rares[rareId] = true;
-  end
-
+local function nameCheck ()
   for zone, zoneNodes in pairs(nodes) do
     for coords, node in pairs(zoneNodes) do
-      local rareId = node.rare;
+      local info = addon:getNodeInfo(node);
 
-      if (rareId ~= nil) then
-        local rare = rareInfo[rareId];
+      if (info == nil) then
+        print(node.treasure, '-', node.rare);
+      end
 
-        if (rare == nil) then
-          print('no information for rare:', rareId);
-        else
-          rares[rareId] = false;
+      if (info and info.name == nil) then
+        if (node.treasure ~= nil) then
+          print('no name for treasure:', node.treasure);
+        end
+
+        if (node.rare ~= nil) then
+          print('no name for rare:', node.rare);
         end
       end
     end
   end
+end
 
-  for rareId, flag in pairs(rares) do
-    if (flag == true) then
-      print('rare has no node:', rareId);
-    end
-  end
+addon:on('PLAYER_STOPPED_MOVING', function ()
+  nameCheck();
 end);
