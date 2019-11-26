@@ -21,7 +21,7 @@ local function addTreasureAchievementInfo (treasureId, achievementId, criteriaIn
   addAchievementInfo(treasureInfo, treasureId, achievementId, criteriaIndex);
 end
 
-local function addRareAchievementInfo (rareId, achievementId, criteriaIndex)
+local function addRareAchievementInfo (rareId, achievementId, criteriaIndex, description)
   local rareData;
 
   addAchievementInfo(rareInfo, rareId, achievementId, criteriaIndex);
@@ -37,6 +37,8 @@ local function addRareAchievementInfo (rareId, achievementId, criteriaIndex)
       rareData.name = criteriaInfo[1];
     end
   end
+
+  rareData.description = rareData.description or description;
 end
 
 do
@@ -130,13 +132,13 @@ addon:on('PLAYER_LOGIN', function ()
   end
 
   -- "It Was Worth Every Ritual Stone" for some reason returns weird assetIds
-  addRareAchievementInfo(69471, 8101, 1);
-  addRareAchievementInfo(69633, 8101, 2);
-  addRareAchievementInfo(69341, 8101, 3);
-  addRareAchievementInfo(69339, 8101, 4);
-  addRareAchievementInfo(69749, 8101, 5);
-  addRareAchievementInfo(69767, 8101, 6);
-  addRareAchievementInfo(70080, 8101, 7);
-  addRareAchievementInfo(69396, 8101, 8);
-  addRareAchievementInfo(69347, 8101, 9);
+  addRareAchievementInfo(69471, 8101, 1, 'Needs 3x Shan\'ze Ritual Stone] to summon');
+  addRareAchievementInfo(69633, 8101, 2, 'Needs 3x Shan\'ze Ritual Stone] to summon');
+  addRareAchievementInfo(69341, 8101, 3, 'Needs 3x Shan\'ze Ritual Stone] to summon');
+  addRareAchievementInfo(69339, 8101, 4, 'Needs 3x Shan\'ze Ritual Stone] to summon');
+  addRareAchievementInfo(69749, 8101, 5, 'Needs 3x Shan\'ze Ritual Stone] to summon');
+  addRareAchievementInfo(69767, 8101, 6, 'Needs 3x Shan\'ze Ritual Stone] to summon');
+  addRareAchievementInfo(70080, 8101, 7, 'Needs 3x Shan\'ze Ritual Stone] to summon');
+  addRareAchievementInfo(69396, 8101, 8, 'Needs 3x Shan\'ze Ritual Stone] to summon');
+  addRareAchievementInfo(69347, 8101, 9, 'Needs 3x Shan\'ze Ritual Stone] to summon');
 end);

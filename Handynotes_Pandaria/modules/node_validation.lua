@@ -268,10 +268,12 @@ local function interpreteNodeInfo (nodeInfo)
     end
 
     if (rareInfo.special == true) then
-      nodeInfo.icon = ICON_MAP.skullGray;
+      nodeInfo.icon = ICON_MAP.skullBlue;
       nodeInfo.display = true;
       return;
     end
+
+    nodeInfo.icon = ICON_MAP.skullGray;
   end
 
   local treasureInfo = nodeInfo.treasureInfo;

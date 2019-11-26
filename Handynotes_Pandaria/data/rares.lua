@@ -19,9 +19,11 @@ shared.rareInfo = {
   },
   [64403] = {
     name = 'Alani',
+    description = 'Cloud Serpent flying arround the Vale. Needs 10 Sky Crystals to remove immunity.'
   },
   [69769] = {
     name = 'Zandalari Warbringer',
+    description = 'The color of the NPC\'s mount determines the color of the mount that drops.',
   },
   [69768] = {
     name = 'Zandalari Warscout',
@@ -57,6 +59,20 @@ shared.rareInfo = {
   [50356] = {
     description = 'Drops item that increases experience by 300% for 1 hour up to level 85.',
     special = true,
-  }
+  },
+  [50831] = {
+    description = 'Drops item that increases reputation with all Pandaria factions by 1000.',
+    special = true,
+  },
+  -- rares with info
+  [50806] = {
+    description = 'Roams in the old river between the location points.',
+  },
+  [73157] = {
+    description = 'Inside cave.',
+  },
+  [72769] = {
+    description = 'Inside cave.',
+  },
 };
 

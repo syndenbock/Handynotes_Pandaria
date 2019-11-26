@@ -54,9 +54,7 @@ function addon:funnel (eventList, timeSpan, callback)
     end
   end
 
-  for x = 1, #eventList, 1 do
-    addon:on(eventList[x], funnel);
-  end
+  addon:on(eventList, funnel);
 
   -- returning funnel for manual call
   return funnel;
