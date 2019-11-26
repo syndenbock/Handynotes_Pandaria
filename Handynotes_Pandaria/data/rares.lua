@@ -53,5 +53,10 @@ shared.rareInfo = {
     name = 'Disha Fearwarden',
     faction = 'Horde',
   },
+  -- special rares
+  [50356] = {
+    description = 'Drops item that increases experience by 300% for 1 hour up to level 85.',
+    special = true,
+  }
 };
 

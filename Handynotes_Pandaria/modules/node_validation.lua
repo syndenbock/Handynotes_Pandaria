@@ -9,7 +9,10 @@ local ICON_MAP = {
   question = 'Interface\\Icons\\inv_misc_questionmark',
   skullGray = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIcon.tga',
   skullGreen = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconGreen.tga',
+  skullBlue = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconBlue.tga',
   skullOrange = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconOrange.tga',
+  skullYellow = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconYellow.tga',
+  skullPurple = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIconPurple.tga',
   chest = 'Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS',
 };
 
@@ -139,7 +142,7 @@ local function getMountInfo (rareData)
   local list = {};
   local totalData = {
     list = list,
-    collected = false,
+    collected = true,
   };
 
   for x = 1, #mountList, 1 do
@@ -183,6 +186,8 @@ local function getRareInfo (nodeData)
 
   local info = {
     name = rareData.name,
+    description = rareData.description,
+    special = rareData.special,
     achievementInfo = getAchievementInfo(rareData),
     toyInfo = getToyInfo(rareData),
     mountInfo = getMountInfo(rareData),
@@ -226,7 +231,7 @@ local function interpreteNodeInfo (nodeInfo)
   local rareInfo = nodeInfo.rareInfo;
 
   if (rareInfo ~= nil) then
-    if (rareInfo.questCompleted ~= nil and rareInfo.questCompleted == true) then
+    if (rareInfo.questCompleted == true) then
       nodeInfo.display = false;
       return;
     end
@@ -235,7 +240,7 @@ local function interpreteNodeInfo (nodeInfo)
 
     if (mountInfo ~= nil) then
       if (mountInfo.collected == false) then
-        nodeInfo.icon = mountInfo.icon;
+        nodeInfo.icon = mountInfo.icon or ICON_MAP.skullPurple;
         nodeInfo.display = true;
         return;
       end
@@ -245,7 +250,7 @@ local function interpreteNodeInfo (nodeInfo)
 
     if (toyInfo ~= nil) then
       if (toyInfo.collected == false) then
-        nodeInfo.icon = toyInfo.icon;
+        nodeInfo.icon = toyInfo.icon or ICON_MAP.skullGreen;
         nodeInfo.display = true;
         return;
       end
@@ -256,10 +261,16 @@ local function interpreteNodeInfo (nodeInfo)
     if (achievementInfo ~= nil) then
       if (achievementInfo.completed == false) then
 --        nodeInfo.icon = achievementInfo.icon;
-        nodeInfo.icon = ICON_MAP.skullGray;
+        nodeInfo.icon = ICON_MAP.skullYellow;
         nodeInfo.display = true;
         return;
       end
+    end
+
+    if (rareInfo.special == true) then
+      nodeInfo.icon = ICON_MAP.skullGray;
+      nodeInfo.display = true;
+      return;
     end
   end
 
