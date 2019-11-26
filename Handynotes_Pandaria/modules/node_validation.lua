@@ -53,7 +53,7 @@ local function getAchievementInfo (rareData)
     local text = achievementInfo[2];
     local completed = achievementInfo[4];
     local criteriaIndex = achievementData.index;
-    local fulfilled;
+    local fulfilled = false;
     local info = {
       icon = achievementInfo[10],
     };
@@ -88,7 +88,6 @@ local function getAchievementInfo (rareData)
     if (not info.completed) then
       totalInfo.completed = false;
     end
-
     totalInfo.icon = totalInfo.icon or info.icon;
 
     list[x] = info;
@@ -112,22 +111,20 @@ local function getToyInfo (rareData)
     local toy = toyList[x];
     local toyInfo = {GetItemInfo(toy)};
     local toyName = toyInfo[1];
-    local text = 'Toy: ';
     local info = {
       icon = getItemIcon(toy) or ICON_MAP.skullGreen,
       collected = PlayerHasToy(toy),
     };
 
     if (info.collected) then
-      text = setTextColor(text, COLOR_MAP.green);
+      toyName = setTextColor(toyName, COLOR_MAP.green);
     else
-      text = setTextColor(text, COLOR_MAP.red);
+      toyName = setTextColor(toyName, COLOR_MAP.red);
       totalData.collected = false;
       totalData.icon = totalData.icon or info.icon;
     end
 
-    text = text .. toyName;
-    info.text = text;
+    info.text = toyName;
     list[x] = info;
   end
 
@@ -149,22 +146,20 @@ local function getMountInfo (rareData)
     local mountId = mountList[x];
     local mountInfo = {C_MountJournal.GetMountInfoByID(mountId)};
     local mountName = mountInfo[1];
-    local text = 'Mount: ';
     local info = {
       icon = mountInfo[3] or ICON_MAP.skullOrange,
       collected = mountInfo[11],
     };
 
     if (info.collected) then
-      text = setTextColor(text, COLOR_MAP.green);
+      mountName = setTextColor(mountName, COLOR_MAP.green);
     else
-      text = setTextColor(text, COLOR_MAP.red);
+      mountName = setTextColor(mountName, COLOR_MAP.red);
       totalData.collected = false;
       totalData.icon = totalData.icon or info.icon;
     end
 
-    text = text .. mountName;
-    info.text = text;
+    info.text = mountName;
     list[x] = info;
   end
 
@@ -233,8 +228,6 @@ local function interpreteNodeInfo (nodeInfo)
   if (rareInfo ~= nil) then
     local mountInfo = rareInfo.mountInfo;
 
-    nodeInfo.name = nodeInfo.name or rareInfo.name;
-
     if (mountInfo ~= nil) then
       if (mountInfo.collected == false) then
         nodeInfo.icon = mountInfo.icon;
@@ -268,8 +261,6 @@ local function interpreteNodeInfo (nodeInfo)
   local treasureInfo = nodeInfo.treasureInfo;
 
   if (treasureInfo ~= nil) then
-    nodeInfo.name = nodeInfo.name or treasureInfo.name;
-
     if (treasureInfo.collected == false) then
       nodeInfo.icon = treasureInfo.icon;
       nodeInfo.display = true;

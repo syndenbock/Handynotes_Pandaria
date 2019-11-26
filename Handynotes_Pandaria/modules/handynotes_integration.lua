@@ -54,16 +54,30 @@ function handler:GetNodes2(uiMapId, isMinimap)
   return makeIterator(zones, isMinimap);
 end
 
+local function addTooltipText (tooltip, info, header)
+  if (info == nil or info.completed == true or info.collected == true) then return end
+
+  local list = info.list;
+
+  for x = 1, #list, 1 do
+    if (list[x].collected == false or list[x].completed == false) then
+      tooltip:AddDoubleLine(header, list[x].text);
+      header = ' ';
+    end
+  end
+end
+
 function handler:OnEnter(uiMapId, coords)
   local zoneNodes = nodes[uiMapId];
 
   if (zoneNodes == nil) then return end
 
-  local node = zoneNodes[coords]
+  local node = zoneNodes[coords];
 
   if (node == nil) then return end
 
   local tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
+  local nodeInfo = node.info.rareInfo or node.info.treasureInfo;
 
   if (self:GetCenter() > UIParent:GetCenter()) then
     tooltip:SetOwner(self, "ANCHOR_LEFT")
@@ -71,15 +85,15 @@ function handler:OnEnter(uiMapId, coords)
     tooltip:SetOwner(self, "ANCHOR_RIGHT")
   end
 
-  tooltip:SetText(node.info.name or node.rare or node.treasure);
+  tooltip:SetText(nodeInfo.name or node.rare or node.treasure);
 
-  if (node.info.description ~= nil) then
-    tooltip:AddLine(node.info.description);
+  if (nodeInfo.description ~= nil) then
+    tooltip:AddLine(nodeInfo.description);
   end
 
---  for x = 1, #node.info.text, 1 do
---    tooltip:AddLine(node.info.text[x]);
---  end
+  addTooltipText(tooltip, nodeInfo.mountInfo, 'Mounts:');
+  addTooltipText(tooltip, nodeInfo.toyInfo, 'Toys:');
+  addTooltipText(tooltip, nodeInfo.achievementInfo, 'Achievements:');
 
   tooltip:Show();
 end
