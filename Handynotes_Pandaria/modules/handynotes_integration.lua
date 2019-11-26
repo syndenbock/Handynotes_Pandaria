@@ -86,6 +86,7 @@ function handler:OnEnter(uiMapId, coords)
   end
 
   tooltip:SetText(nodeInfo.name or node.rare or node.treasure);
+  -- tooltip:SetText(nodeInfo.name .. ' ' .. (node.rare or node.treasure));
 
   if (nodeInfo.description ~= nil) then
     tooltip:AddLine(nodeInfo.description);

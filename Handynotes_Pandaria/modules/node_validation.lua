@@ -284,9 +284,11 @@ local function interpreteNodeInfo (nodeInfo)
       nodeInfo.display = true;
       return;
     end
+
+    nodeInfo.icon = nodeInfo.icon or ICON_MAP.chest;
   end
 
-  nodeInfo.icon = ICON_MAP.question;
+  nodeInfo.icon = nodeInfo.icon or ICON_MAP.question;
   nodeInfo.display = false;
 end
 
