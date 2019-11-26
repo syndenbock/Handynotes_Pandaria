@@ -10,15 +10,21 @@ do
   local events = {};
   local addonFrame = CreateFrame('frame');
 
-  function addon:on (event, callback)
-    local list = events[event];
+  function addon:on (eventList, callback)
+    if (type(eventList) ~= 'table') then
+      eventList = {eventList};
+    end
 
-    if (list == nil) then
-      events[event] = {callback};
-      addonFrame:RegisterEvent(event);
-    else
+    for x = 1, #eventList, 1 do
+      local event = eventList[x];
+      local list = events[event];
 
-      list[#list + 1] = callback;
+      if (list == nil) then
+        events[event] = {callback};
+        addonFrame:RegisterEvent(event);
+      else
+        list[#list + 1] = callback;
+      end
     end
   end
 
@@ -29,4 +35,29 @@ do
   end
 
   addonFrame:SetScript('OnEvent', eventHandler);
+end
+
+-- event funnel
+function addon:funnel (eventList, timeSpan, callback)
+  local flag = false;
+
+  local funnel = function (...)
+    local args = {...};
+
+    if (flag == false) then
+      flag = true;
+
+      C_Timer.After(timeSpan, function ()
+        flag = false;
+        callback(unpack(args));
+      end);
+    end
+  end
+
+  for x = 1, #eventList, 1 do
+    addon:on(eventList[x], funnel);
+  end
+
+  -- returning funnel for manual call
+  return funnel;
 end

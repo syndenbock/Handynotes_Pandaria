@@ -139,6 +139,13 @@ local options = {
   },
 }
 
+local function updateNodes ()
+  print('sending update!');
+  HandyNotes:SendMessage('HandyNotes_NotifyUpdate', addonName);
+end
+
 addon:on('PLAYER_LOGIN', function ()
-  HandyNotes:RegisterPluginDB(addonName, handler, options)
+  HandyNotes:RegisterPluginDB(addonName, handler, options);
+  addon:funnel({'CRITERIA_UPDATE'}, 2, updateNodes);
+  addon:on({'NEW_TOY_ADDED', 'NEW_MOUNT_ADDED'}, updateNodes);
 end);
