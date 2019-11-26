@@ -3,7 +3,7 @@ local addonName, shared = ...;
 local addon = shared.addon;
 local HandyNotes = shared.HandyNotes;
 local nodes = shared.nodes;
-
+local nodeInfo = {};
 local handler = {};
 
 local function makeIterator (zones, isMinimap)
@@ -25,7 +25,8 @@ local function makeIterator (zones, isMinimap)
           else
             coords = nextCoords;
 
-            node.info = info;
+            nodeInfo[zone] = nodeInfo[zone] or {};
+            nodeInfo[zone][coords] = info;
 
             if (info.display) then
               return coords, zone, info.icon, 1, 1;
@@ -48,8 +49,10 @@ function handler:GetNodes2(uiMapId, isMinimap)
   local zones;
 
   if not zones then
-    zones = {uiMapId}
+    zones = {uiMapId};
   end
+
+  nodeInfo = {};
 
   return makeIterator(zones, isMinimap);
 end
@@ -68,16 +71,17 @@ local function addTooltipText (tooltip, info, header)
 end
 
 function handler:OnEnter(uiMapId, coords)
-  local zoneNodes = nodes[uiMapId];
+  local zoneNodes = nodeInfo[uiMapId];
 
   if (zoneNodes == nil) then return end
 
-  local node = zoneNodes[coords];
+  local nodeInfo = zoneNodes[coords];
 
-  if (node == nil) then return end
+  if (nodeInfo == nil) then return end
 
   local tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
-  local nodeInfo = node.info.rareInfo or node.info.treasureInfo;
+
+  nodeInfo = nodeInfo.rareInfo or nodeInfo.treasureInfo;
 
   if (self:GetCenter() > UIParent:GetCenter()) then
     tooltip:SetOwner(self, "ANCHOR_LEFT")
@@ -138,7 +142,7 @@ local options = {
       order = 20,
     },
   },
-}
+};
 
 local function updateNodes ()
   HandyNotes:SendMessage('HandyNotes_NotifyUpdate', addonName);
