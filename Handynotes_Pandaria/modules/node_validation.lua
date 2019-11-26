@@ -226,6 +226,11 @@ local function interpreteNodeInfo (nodeInfo)
   local rareInfo = nodeInfo.rareInfo;
 
   if (rareInfo ~= nil) then
+    if (rareInfo.questCompleted ~= nil and rareInfo.questCompleted == true) then
+      nodeInfo.display = false;
+      return;
+    end
+
     local mountInfo = rareInfo.mountInfo;
 
     if (mountInfo ~= nil) then
