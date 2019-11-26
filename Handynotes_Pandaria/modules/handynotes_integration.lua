@@ -140,7 +140,6 @@ local options = {
 }
 
 local function updateNodes ()
-  print('sending update!');
   HandyNotes:SendMessage('HandyNotes_NotifyUpdate', addonName);
 end
 

@@ -75,7 +75,7 @@ shared.treasureInfo = {
   },
   [31424] = {
     ["name"] = "Hardened Sap of Kri'vess",
-    ["description"] = "Grey item worth 110g.",
+    ["description"] = "Grey item worth 110g. Search around the tree",
   },
   [31869] = {
     ["name"] = "Boat-Building Instructions",

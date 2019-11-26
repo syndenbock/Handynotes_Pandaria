@@ -751,6 +751,9 @@ shared.nodes = {
     [53905840] = {
       ["treasure"] = 31424,
     },
+    [57505850] = {
+      ["treasure"] = 31424,
+    },
   },
   [MAP_IDS.veiledstar] = {
     [75107640] = {
