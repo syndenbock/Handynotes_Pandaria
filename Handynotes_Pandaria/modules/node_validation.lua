@@ -31,13 +31,6 @@ local function setTextColor (text, color)
   return color .. text .. '|r';
 end
 
-local function getItemIcon (itemId)
-  local info = {GetItemInfo(itemId)};
-  local icon = info[10];
-
-  return icon;
-end
-
 local function getAchievementInfo (rareData)
   local achievementList = rareData.achievements;
 
@@ -113,9 +106,9 @@ local function getToyInfo (rareData)
   for x = 1, #toyList, 1 do
     local toy = toyList[x];
     local toyInfo = {GetItemInfo(toy)};
-    local toyName = toyInfo[1];
+    local toyName = toyInfo[1] or '?';
     local info = {
-      icon = getItemIcon(toy) or ICON_MAP.skullGreen,
+      icon = toyInfo[10] or ICON_MAP.skullGreen,
       collected = PlayerHasToy(toy),
     };
 

@@ -5,6 +5,7 @@ local HandyNotes = shared.HandyNotes;
 local nodes = shared.nodes;
 local nodeInfo = {};
 local handler = {};
+local tooltip;
 
 local function makeIterator (zones, isMinimap)
   local zoneIndex, zone = next(zones, nil);
@@ -75,13 +76,13 @@ function handler:OnEnter(uiMapId, coords)
 
   if (zoneNodes == nil) then return end
 
-  local nodeInfo = zoneNodes[coords];
+  local node = zoneNodes[coords];
 
-  if (nodeInfo == nil) then return end
+  if (node == nil) then return end
 
-  local tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
+  tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
 
-  nodeInfo = nodeInfo.rareInfo or nodeInfo.treasureInfo;
+  nodeData = node.rareInfo or node.treasureInfo;
 
   if (self:GetCenter() > UIParent:GetCenter()) then
     tooltip:SetOwner(self, "ANCHOR_LEFT")
@@ -89,23 +90,21 @@ function handler:OnEnter(uiMapId, coords)
     tooltip:SetOwner(self, "ANCHOR_RIGHT")
   end
 
-  tooltip:SetText(nodeInfo.name or node.rare or node.treasure);
-  -- tooltip:SetText(nodeInfo.name .. ' ' .. (node.rare or node.treasure));
+  tooltip:SetText(nodeData.name or node.rare or node.treasure);
+  -- tooltip:SetText(nodeData.name .. ' ' .. (node.rare or node.treasure));
 
-  if (nodeInfo.description ~= nil) then
-    tooltip:AddLine(nodeInfo.description);
+  if (nodeData.description ~= nil) then
+    tooltip:AddLine(nodeData.description);
   end
 
-  addTooltipText(tooltip, nodeInfo.mountInfo, 'Mounts:');
-  addTooltipText(tooltip, nodeInfo.toyInfo, 'Toys:');
-  addTooltipText(tooltip, nodeInfo.achievementInfo, 'Achievements:');
+  addTooltipText(tooltip, nodeData.mountInfo, 'Mounts:');
+  addTooltipText(tooltip, nodeData.toyInfo, 'Toys:');
+  addTooltipText(tooltip, nodeData.achievementInfo, 'Achievements:');
 
   tooltip:Show();
 end
 
 function handler:OnLeave(uiMapId, coords)
-  local tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
-
   tooltip:Hide();
 end
 

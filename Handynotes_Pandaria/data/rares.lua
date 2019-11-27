@@ -23,7 +23,7 @@ shared.rareInfo = {
   },
   [69769] = {
     name = 'Zandalari Warbringer',
-    description = 'The color of the NPC\'s mount determines the color of the mount that drops.',
+    description = 'The color of the NPC\'s mount determines the color of the mount that can drop.',
   },
   [69768] = {
     name = 'Zandalari Warscout',
@@ -57,11 +57,11 @@ shared.rareInfo = {
   },
   -- special rares
   [50356] = {
-    description = 'Drops item that increases experience by 300% for 1 hour up to level 85.',
+    description = 'Can drop item that increases experience by 300% for 1 hour up to level 85.',
     special = true,
   },
   [50831] = {
-    description = 'Drops item that increases reputation with all Pandaria factions by 1000.',
+    description = 'Can drop item that increases reputation with all Pandaria factions by 1000.',
     special = true,
   },
   -- rares with info

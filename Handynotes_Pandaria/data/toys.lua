@@ -1,8 +1,6 @@
 local addonName, shared = ...;
 
-local rareInfo = shared.rareInfo;
-
-local toyMap = {
+shared.toyData = {
   [86588] = 50817,
   [86589] = 50821,
   [86593] = 50836,
@@ -28,12 +26,3 @@ local toyMap = {
   [86565] = 51059,
   [104329] = 72898,
 };
-
-for toyId, rareId in pairs(toyMap) do
-  local data;
-
-  rareInfo[rareId] = rareInfo[rareId] or {};
-  data = rareInfo[rareId];
-  data.toys = data.toys or {};
-  table.insert(data.toys, toyId);
-end
