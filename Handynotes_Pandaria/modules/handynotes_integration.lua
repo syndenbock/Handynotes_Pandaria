@@ -17,28 +17,28 @@ local function makeIterator (zones, isMinimap)
       local zoneNodes = nodes[zone];
 
       if (zoneNodes) then
-        local nextCoords, node = next(zoneNodes, coords);
+        coords, node = next(zoneNodes, coords);
 
         while (node) do
           local info = addon:getNodeInfo(node);
 
           if (info == nil) then
-            zoneNodes[nextCoords] = nil;
-          else
-            coords = nextCoords;
+            local remCoords = coords;
 
+            -- get the next node before deleting, so next() knows the coords
+            coords, node = next(zoneNodes, coords);
+            zoneNodes[remCoords] = nil;
+          else
             nodeInfo[zone] = nodeInfo[zone] or {};
             nodeInfo[zone][coords] = info;
 
             if (info.display) then
               return coords, zone, info.icon, settings.icon_scale, settings.icon_alpha;
             end
+
+            coords, node = next(zoneNodes, coords);
           end
-
-          nextCoords, node = next(zoneNodes, coords);
         end
-
-        coords = nil;
       end
 
       zoneIndex, zone = next(zones, zoneIndex);
