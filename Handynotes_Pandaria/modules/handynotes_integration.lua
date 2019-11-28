@@ -37,6 +37,8 @@ local function makeIterator (zones, isMinimap)
 
           nextCoords, node = next(zoneNodes, coords);
         end
+
+        coords = nil;
       end
 
       zoneIndex, zone = next(zones, zoneIndex);
@@ -47,7 +49,7 @@ local function makeIterator (zones, isMinimap)
 end
 
 function handler:GetNodes2(uiMapId, isMinimap)
-  --local zones = HandyNotes:GetContinentZoneList(uiMapId) -- Is this a continent?
+  -- local zones = HandyNotes:GetContinentZoneList(uiMapId); -- Is this a continent?
   local zones;
 
   if not zones then
