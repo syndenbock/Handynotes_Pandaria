@@ -6,9 +6,6 @@
 ## RequiredDeps: HandyNotes
 ## SavedVariables: storedData
 
-# libraries
-libraries\LibStub\LibStub.lua
-
 # addon files
 HandyNotes_Pandaria.lua
 

@@ -1,6 +1,11 @@
 local addonName, shared = ...;
 
+if LibStub == nil then return end
+
 shared.HandyNotes = LibStub('AceAddon-3.0'):GetAddon('HandyNotes', true)
+
+if shared.HandyNotes == nil then return end
+
 shared.addon = {};
 
 local addon = shared.addon;
