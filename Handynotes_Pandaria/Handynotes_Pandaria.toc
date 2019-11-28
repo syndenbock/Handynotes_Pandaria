@@ -4,7 +4,7 @@
 ## Notes: Shows locations of treasures and rares in Pandaria
 ## Author: syndenbock
 ## RequiredDeps: HandyNotes
-## SavedVariables:
+## SavedVariables: storedData
 
 # libraries
 libraries\LibStub\LibStub.lua
