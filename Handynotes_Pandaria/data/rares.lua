@@ -74,5 +74,29 @@ shared.rareInfo = {
   [72769] = {
     description = 'Inside cave.',
   },
+  [72193] = {
+    description = 'Speak to Fin Longpaw on the pier to summon him.'
+  },
+  [71864] = {
+    description = 'The rocks can be skipped with jump/chair items or blink.'
+  },
+  [73161] = {
+    description = 'Great Turtles can respawn as this rare.'
+  },
+  [73281] = {
+    description = 'Kill Evermaw for the lantern to summon the ship at the ritual stone.'
+  },
+  [73166] = {
+    description = 'Spineclaws can respawn as this rare.'
+  },
+  [72045] = {
+    description = 'Click on the suspicious shell.'
+  },
+  [73160] = {
+    description = 'Keep killing all the Ironfur mobs until it spawns.'
+  },
+  [72049] = {
+    description = 'Kite a Fishgorged Crane from the south onto the corpse.'
+  },
 };
 
