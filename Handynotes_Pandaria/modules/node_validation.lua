@@ -108,7 +108,9 @@ local function getToyInfo (rareData)
     local toyInfo = {GetItemInfo(toy)};
     local toyName = toyInfo[1] or '?';
     local info = {
-      icon = toyInfo[10] or ICON_MAP.skullGreen,
+      -- if info is not cached yet, we can use GetItemIcon which doesn't need
+      -- the cache
+      icon = toyInfo[10] or GetItemIcon(toy) or ICON_MAP.skullGreen,
       collected = PlayerHasToy(toy),
     };
 
