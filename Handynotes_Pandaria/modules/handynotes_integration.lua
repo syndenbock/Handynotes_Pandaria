@@ -137,6 +137,10 @@ local function validateSettings (config, defaults)
   replaceTable(config, new);
 end
 
+local function updateNodes ()
+  HandyNotes:SendMessage('HandyNotes_NotifyUpdate', addonName);
+end
+
 local function registerWithHandyNotes ()
   local defaults = {
     icon_scale = 1,
@@ -160,7 +164,8 @@ local function registerWithHandyNotes ()
     desc = 'Handynotes Pandaria',
     get = function(info) return settings[info.arg] end,
     set = function(info, v)
-      settings[info.arg] = v
+      settings[info.arg] = v;
+      updateNodes();
     end,
     args = {
       desc = {
@@ -190,9 +195,6 @@ local function registerWithHandyNotes ()
   HandyNotes:RegisterPluginDB(addonName, handler, options);
 end
 
-local function updateNodes ()
-  HandyNotes:SendMessage('HandyNotes_NotifyUpdate', addonName);
-end
 
 addon:on('PLAYER_LOGIN', function ()
   registerWithHandyNotes();
