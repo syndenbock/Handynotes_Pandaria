@@ -49,6 +49,10 @@ local function makeIterator (zones, isMinimap)
 end
 
 function handler:GetNodes2(uiMapId, isMinimap)
+  if (isMinimap == true and settings.minimap_icons ~= true) then
+    return function () return nil end
+  end
+
   -- local zones = HandyNotes:GetContinentZoneList(uiMapId); -- Is this a continent?
   local zones;
 
@@ -145,6 +149,7 @@ local function registerWithHandyNotes ()
   local defaults = {
     icon_scale = 1,
     icon_alpha = 1,
+    minimap_icons = true,
   };
 
   if (storedData == nil) then
@@ -168,26 +173,31 @@ local function registerWithHandyNotes ()
       updateNodes();
     end,
     args = {
-      desc = {
-        name = 'Handynotes Pandaria Options.',
-        type = "description",
-        order = 0,
+      minimap_icons = {
+        order = 1,
+        type = 'toggle',
+        name = 'Minimap icons',
+        desc = 'Show items on the minimap',
+        arg = 'minimap_icons',
+        width = 'full',
       },
       icon_scale = {
+        order = 2,
         type = 'range',
         name = 'Icon Scale',
         desc = 'The scale of the icons',
-        min = 0.25, max = 2, step = 0.01,
-        arg = "icon_scale",
-        order = 10,
+        min = 0.5, max = 3, step = 0.1,
+        arg = 'icon_scale',
+        width = 'normal',
       },
       icon_alpha = {
+        order = 3,
         type = 'range',
         name = 'Icon Alpha',
         desc = 'The alpha transparency of the icons',
         min = 0, max = 1, step = 0.01,
-        arg = "icon_alpha",
-        order = 20,
+        arg = 'icon_alpha',
+        width = 'normal',
       },
     },
   };
