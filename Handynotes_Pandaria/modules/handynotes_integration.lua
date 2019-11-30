@@ -139,6 +139,8 @@ do
       local x, y = HandyNotes:getXY(coords);
       local info = infoProvider.getNodeInfo(mapId, coords);
 
+      info = info.rareInfo or info.treasureInfo;
+
       TomTom:AddWaypoint(mapId, x, y, {
         title = info.name;
         persistent = nil,
