@@ -6,6 +6,7 @@ local nodes = shared.nodeData;
 local handler = {};
 local settings;
 local tooltip;
+local dropdown;
 
 local infoProvider = addon.import('infoProvider');
 
@@ -128,6 +129,51 @@ local function replaceTable (oldTable, newTable)
 
   for key, value in pairs(newTable) do
     oldTable[key] = value;
+  end
+end
+
+-- node menu handling
+do
+  local function addTomTomWaypoint(button, mapId, coords)
+    if TomTom then
+      local x, y = HandyNotes:getXY(coords);
+      local info = infoProvider.getNodeInfo(mapId, coords);
+
+      TomTom:AddWaypoint(mapId, x, y, {
+        title = info.name;
+        persistent = nil,
+        minimap = settings.minimap_icons,
+        world = true,
+      });
+    end
+  end
+
+  local dropdown = CreateFrame('Frame', 'HandyNotes_Pandaria_DropdownMenu');
+  local clickedMapId;
+  local clickedCoord;
+
+  dropdown.displayMode = "MENU";
+  dropdown.initialize = function (button, level)
+    if (not level) then return end
+
+    if (level == 1) then
+      if (IsAddOnLoaded('TomTom')) then
+        UIDropDownMenu_AddButton({
+          text = 'Add TomTom waypoint',
+          func = addTomTomWaypoint,
+          arg1 = clickedMapId,
+          arg2 = clickedCoord,
+        }, level)
+      end
+    end
+  end;
+
+  function handler:OnClick (button, down, mapID, coord)
+    if (button == 'RightButton' and not down) then
+      clickedMapId = mapID;
+      clickedCoord = coord;
+      ToggleDropDownMenu(1, nil, dropdown, self, 0, 0);
+    end
   end
 end
 

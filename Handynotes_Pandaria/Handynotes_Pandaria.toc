@@ -4,6 +4,7 @@
 ## Notes: Shows locations of treasures and rares in Pandaria
 ## Author: syndenbock
 ## RequiredDeps: HandyNotes
+## OptionalDeps: TomTom
 ## SavedVariables: storedData
 
 # addon files
