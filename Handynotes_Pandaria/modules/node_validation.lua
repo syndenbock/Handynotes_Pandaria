@@ -6,6 +6,7 @@ local treasureInfo = shared.treasureData;
 local nodes = shared.nodeData;
 local playerFaction;
 local dataCache;
+local pendingData = {};
 
 local ICON_MAP = {
   question = 'Interface\\Icons\\inv_misc_questionmark',
@@ -27,6 +28,22 @@ local COLOR_MAP = {
 
 addon.on('PLAYER_LOGIN', function ()
   playerFaction = UnitFactionGroup('player');
+end);
+
+addon.on('GET_ITEM_INFO_RECEIVED', function (itemId, success)
+  local info = pendingData[itemId];
+
+  if (info == nil) then return end
+
+  if (success) then
+    local itemInfo = {GetItemInfo(itemId)};
+
+    info.name = itemInfo[1];
+    addon.yell('DATA_READY', info);
+    print('data ready');
+  end
+
+  pendingData[itemId] = nil;
 end);
 
 local function setTextColor (text, color)
@@ -108,13 +125,21 @@ local function getToyInfo (rareData)
   for x = 1, #toyList, 1 do
     local toy = toyList[x];
     local toyInfo = {GetItemInfo(toy)};
-    local toyName = toyInfo[1] or '?';
+    local toyName = toyInfo[1];
     local info = {
-      -- if info is not cached yet, we can use GetItemIcon which doesn't need
-      -- the cache
-      icon = toyInfo[10] or GetItemIcon(toy) or ICON_MAP.skullGreen,
       collected = PlayerHasToy(toy),
     };
+
+    -- data is not cached yet
+    if (toyName == nil) then
+      pendingData[toy] = info;
+      info.name = 'waiting for data...';
+      info.icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
+      print('data pending');
+    else
+      info.name = toyName;
+      info.icon = toyInfo[10] or ICON_MAP.skullGreen;
+    end
 
     if (info.collected) then
       toyName = setTextColor(toyName, COLOR_MAP.green);

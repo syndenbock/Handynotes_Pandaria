@@ -65,6 +65,7 @@ addon.funnel = function (eventList, timeSpan, callback)
   return funnel;
 end
 
+-- export and import handling
 do
   local modules = {};
 
@@ -74,5 +75,26 @@ do
 
   addon.import = function (moduleName)
     return modules[moduleName];
+  end
+end
+
+-- internal message handling
+do
+  local callbacks = {};
+
+  addon.listen = function (message, callback)
+    callbacks[message] = callbacks[message] or {};
+
+    table.insert(callbacks[message], callback);
+  end
+
+  addon.yell = function (message, ...)
+    local callbackList = callbacks[message];
+
+    if (callbackList == nil) then return end
+
+    for x = 1, #callbackList, 1 do
+      callbackList[1](...);
+    end
   end
 end

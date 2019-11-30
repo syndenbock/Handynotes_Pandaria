@@ -39,9 +39,6 @@ local function parseData ()
     if (toyData == nil) then return end
 
     for toyId, rareList in pairs(toyData) do
-      -- request info so it is available when needed
-      GetItemInfo(toyId);
-
       if (type(rareList) ~= 'table') then
         rareList = {rareList};
       end

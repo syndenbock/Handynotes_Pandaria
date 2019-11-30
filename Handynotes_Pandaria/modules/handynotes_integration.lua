@@ -76,20 +76,8 @@ local function addTooltipText (tooltip, info, header)
   end
 end
 
-function handler:OnEnter(uiMapId, coords)
-  local nodeInfo = infoProvider.getNodeInfo(uiMapId, coords);
-
-  if (nodeInfo == nil) then return end
-
-  tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
-
+function displayTooltip (nodeInfo)
   nodeData = nodeInfo.rareInfo or nodeInfo.treasureInfo;
-
-  if (self:GetCenter() > UIParent:GetCenter()) then
-    tooltip:SetOwner(self, "ANCHOR_LEFT")
-  else
-    tooltip:SetOwner(self, "ANCHOR_RIGHT")
-  end
 
   tooltip:SetText(nodeData.name or nodeInfo.rare or nodeInfo.treasure);
   -- tooltip:SetText(nodeData.name .. ' ' .. (node.rare or node.treasure));
@@ -105,9 +93,34 @@ function handler:OnEnter(uiMapId, coords)
   tooltip:Show();
 end
 
+function handler:OnEnter(uiMapId, coords)
+  local nodeInfo = infoProvider.getNodeInfo(uiMapId, coords);
+
+  if (nodeInfo == nil) then return end
+
+  currentInfo = nodeInfo;
+
+  tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
+
+  if (self:GetCenter() > UIParent:GetCenter()) then
+    tooltip:SetOwner(self, "ANCHOR_LEFT");
+  else
+    tooltip:SetOwner(self, "ANCHOR_RIGHT");
+  end
+
+  displayTooltip(nodeInfo);
+end
+
 function handler:OnLeave(uiMapId, coords)
+  currentInfo = nil;
   tooltip:Hide();
 end
+
+addon.listen('DATA_READY', function (info, id)
+  if (currentInfo == info) then
+    displayTooltip(nodeInfo);
+  end
+end);
 
 local function replaceTable (oldTable, newTable)
   -- this clears the table without destroying old references
