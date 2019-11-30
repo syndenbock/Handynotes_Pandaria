@@ -15,7 +15,7 @@ do
   local events = {};
   local addonFrame = CreateFrame('frame');
 
-  function addon:on (eventList, callback)
+  addon.on = function (eventList, callback)
     if (type(eventList) ~= 'table') then
       eventList = {eventList};
     end
@@ -43,7 +43,7 @@ do
 end
 
 -- event funnel
-function addon:funnel (eventList, timeSpan, callback)
+addon.funnel = function (eventList, timeSpan, callback)
   local flag = false;
 
   local funnel = function (...)
@@ -59,8 +59,20 @@ function addon:funnel (eventList, timeSpan, callback)
     end
   end
 
-  addon:on(eventList, funnel);
+  addon.on(eventList, funnel);
 
   -- returning funnel for manual call
   return funnel;
+end
+
+do
+  local modules = {};
+
+  addon.export = function (moduleName, module)
+    modules[moduleName] = module;
+  end
+
+  addon.import = function (moduleName)
+    return modules[moduleName];
+  end
 end

@@ -3,10 +3,11 @@ local addonName, shared = ...;
 local addon = shared.addon;
 local HandyNotes = shared.HandyNotes;
 local nodes = shared.nodeData;
-local nodeInfo = {};
 local handler = {};
 local settings;
 local tooltip;
+
+local infoProvider = addon.import('infoProvider');
 
 local function makeIterator (zones, isMinimap)
   local zoneIndex, zone = next(zones, nil);
@@ -17,26 +18,23 @@ local function makeIterator (zones, isMinimap)
       local zoneNodes = nodes[zone];
 
       if (zoneNodes) then
-        coords, node = next(zoneNodes, coords);
+        coords = next(zoneNodes, coords);
 
-        while (node) do
-          local info = addon:getNodeInfo(node);
+        while (coords) do
+          local info = infoProvider.getNodeInfo(zone, coords);
 
           if (info == nil) then
             local remCoords = coords;
 
             -- get the next node before deleting, so next() knows the coords
-            coords, node = next(zoneNodes, coords);
+            coords = next(zoneNodes, coords);
             zoneNodes[remCoords] = nil;
           else
-            nodeInfo[zone] = nodeInfo[zone] or {};
-            nodeInfo[zone][coords] = info;
-
             if (info.display) then
               return coords, zone, info.icon, settings.icon_scale, settings.icon_alpha;
             end
 
-            coords, node = next(zoneNodes, coords);
+            coords= next(zoneNodes, coords);
           end
         end
       end
@@ -60,7 +58,7 @@ function handler:GetNodes2(uiMapId, isMinimap)
     zones = {uiMapId};
   end
 
-  nodeInfo = {};
+  infoProvider.flush();
 
   return makeIterator(zones, isMinimap);
 end
@@ -79,17 +77,13 @@ local function addTooltipText (tooltip, info, header)
 end
 
 function handler:OnEnter(uiMapId, coords)
-  local zoneNodes = nodeInfo[uiMapId];
+  local nodeInfo = infoProvider.getNodeInfo(uiMapId, coords);
 
-  if (zoneNodes == nil) then return end
-
-  local node = zoneNodes[coords];
-
-  if (node == nil) then return end
+  if (nodeInfo == nil) then return end
 
   tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
 
-  nodeData = node.rareInfo or node.treasureInfo;
+  nodeData = nodeInfo.rareInfo or nodeInfo.treasureInfo;
 
   if (self:GetCenter() > UIParent:GetCenter()) then
     tooltip:SetOwner(self, "ANCHOR_LEFT")
@@ -97,7 +91,7 @@ function handler:OnEnter(uiMapId, coords)
     tooltip:SetOwner(self, "ANCHOR_RIGHT")
   end
 
-  tooltip:SetText(nodeData.name or node.rare or node.treasure);
+  tooltip:SetText(nodeData.name or nodeInfo.rare or nodeInfo.treasure);
   -- tooltip:SetText(nodeData.name .. ' ' .. (node.rare or node.treasure));
 
   if (nodeData.description ~= nil) then
@@ -206,8 +200,8 @@ local function registerWithHandyNotes ()
 end
 
 
-addon:on('PLAYER_LOGIN', function ()
+addon.on('PLAYER_LOGIN', function ()
   registerWithHandyNotes();
-  addon:funnel({'CRITERIA_UPDATE'}, 2, updateNodes);
-  addon:on({'NEW_TOY_ADDED', 'NEW_MOUNT_ADDED'}, updateNodes);
+  addon.funnel({'CRITERIA_UPDATE'}, 2, updateNodes);
+  addon.on({'NEW_TOY_ADDED', 'NEW_MOUNT_ADDED'}, updateNodes);
 end);

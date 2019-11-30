@@ -196,4 +196,4 @@ local function parseData ()
   shared.mountData = nil;
 end
 
-addon:on('PLAYER_LOGIN', parseData);
+addon.on('PLAYER_LOGIN', parseData);

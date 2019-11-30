@@ -9,7 +9,7 @@ local nodes = shared.nodeData;
 local function nameCheck ()
   for zone, zoneNodes in pairs(nodes) do
     for coords, node in pairs(zoneNodes) do
-      local info = addon:getNodeInfo(node);
+      local info = addon.getNodeInfo(node);
 
       if (info == nil) then
         print(node.treasure, '-', node.rare);
@@ -28,6 +28,6 @@ local function nameCheck ()
   end
 end
 
-addon:on('PLAYER_STOPPED_MOVING', function ()
+addon.on('PLAYER_STOPPED_MOVING', function ()
   nameCheck();
 end);

@@ -1,9 +1,11 @@
 local addonName, shared = ...;
 
 local addon = shared.addon;
-local rareInfo = shared.rareData;
+local rareData = shared.rareData;
 local treasureInfo = shared.treasureData;
+local nodes = shared.nodeData;
 local playerFaction;
+local dataCache;
 
 local ICON_MAP = {
   question = 'Interface\\Icons\\inv_misc_questionmark',
@@ -23,7 +25,7 @@ local COLOR_MAP = {
   yellow = '|cFFFFFF00',
 };
 
-addon:on('PLAYER_LOGIN', function ()
+addon.on('PLAYER_LOGIN', function ()
   playerFaction = UnitFactionGroup('player');
 end);
 
@@ -169,29 +171,36 @@ local function getRareInfo (nodeData)
 
   if (rareId == nil) then return nil end
 
-  local rareData = rareInfo[rareId];
+  local rareCache = dataCache.rares;
 
-  if (rareData == nil) then
+  if (rareCache[rareId] ~= nil) then
+    return rareCache[rareId];
+  end
+
+  local rare = rareData[rareId];
+
+  if (rare == nil) then
     return nil;
   end
 
-  if (rareData.faction and rareData.faction ~= playerFaction) then
+  if (rare.faction and rare.faction ~= playerFaction) then
     return nil;
   end
 
   local info = {
-    name = rareData.name,
-    description = rareData.description,
-    special = rareData.special,
-    achievementInfo = getAchievementInfo(rareData),
-    toyInfo = getToyInfo(rareData),
-    mountInfo = getMountInfo(rareData),
+    name = rare.name,
+    description = rare.description,
+    special = rare.special,
+    achievementInfo = getAchievementInfo(rare),
+    toyInfo = getToyInfo(rare),
+    mountInfo = getMountInfo(rare),
   };
 
-  if (rareData.quest ~= nil) then
-    info.questCompleted = IsQuestFlaggedCompleted(rareData.quest);
+  if (rare.quest ~= nil) then
+    info.questCompleted = IsQuestFlaggedCompleted(rare.quest);
   end
 
+  rareCache[rareId] = info;
   return info;
 end
 
@@ -287,7 +296,19 @@ local function interpreteNodeInfo (nodeInfo)
   nodeInfo.display = false;
 end
 
-function addon:getNodeInfo (nodeData)
+local function getNodeInfo (zone, coords)
+  local nodeCache = dataCache.nodes;
+
+  if (nodeCache[zone] ~= nil and nodeCache[zone][coords] ~= nil) then
+    return nodeCache[zone][coords];
+  end
+
+  local nodeData = nodes[zone];
+
+  if (nodeData == nil) then return nil end
+  nodeData = nodeData[coords];
+  if (nodeData == nil) then return nil end
+
   local info = {
     rareInfo = getRareInfo(nodeData),
     treasureInfo = getTreasureInfo(nodeData),
@@ -297,5 +318,25 @@ function addon:getNodeInfo (nodeData)
 
   interpreteNodeInfo(info);
 
+  nodeCache[zone] = nodeCache[zone] or {};
+  nodeCache[zone][coords] = info or {};
+
   return info;
 end
+
+local function flush ()
+  dataCache = {
+    rares = {},
+    treasures = {},
+    nodes = {},
+  };
+end
+
+flush();
+
+local module = {
+  getNodeInfo = getNodeInfo,
+  flush = flush,
+};
+
+addon.export('infoProvider', module);
