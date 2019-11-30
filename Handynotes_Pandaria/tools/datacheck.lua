@@ -1,8 +1,8 @@
 local addonName, shared = ...;
 
 local addon = shared.addon;
-local rareInfo = shared.rareInfo;
-local nodes = shared.nodes;
+local rareInfo = shared.rareData;
+local nodes = shared.nodeData;
 
 --if true then return end
 

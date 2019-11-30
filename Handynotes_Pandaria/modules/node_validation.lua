@@ -1,8 +1,8 @@
 local addonName, shared = ...;
 
 local addon = shared.addon;
-local rareInfo = shared.rareInfo;
-local treasureInfo = shared.treasureInfo;
+local rareInfo = shared.rareData;
+local treasureInfo = shared.treasureData;
 local playerFaction;
 
 local ICON_MAP = {

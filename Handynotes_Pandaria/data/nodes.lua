@@ -14,7 +14,7 @@ local MAP_IDS = {
   timelessisle = 554,
 };
 
-shared.nodes = {
+shared.nodeData = {
   [MAP_IDS.isleofgiants] = {
     [50605440] = {
       ["rare"] = 69161,

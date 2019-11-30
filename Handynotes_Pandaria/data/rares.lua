@@ -1,6 +1,6 @@
 local addonName, shared = ...;
 
-shared.rareInfo = {
+shared.rareData = {
   [60491] = {
     name = 'Sha of Anger',
     quest = 32099,

@@ -3,8 +3,8 @@ local addonName, shared = ...;
 local addon = shared.addon;
 
 local function parseData ()
-  local rareInfo = shared.rareInfo;
-  local treasureInfo = shared.treasureInfo;
+  local rareInfo = shared.rareData;
+  local treasureInfo = shared.treasureData;
 
   local function parseMountData ()
     local mountData = shared.mountData;

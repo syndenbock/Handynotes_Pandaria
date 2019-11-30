@@ -2,7 +2,7 @@ local addonName, shared = ...;
 
 local addon = shared.addon;
 local HandyNotes = shared.HandyNotes;
-local nodes = shared.nodes;
+local nodes = shared.nodeData;
 local nodeInfo = {};
 local handler = {};
 local settings;
