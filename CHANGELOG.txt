@@ -2,6 +2,7 @@ version 1.1
 - Added TomTom waypoint support
 - Added option to toggle minimap icons
 - Removed unneeded LibStub library
+- Added hints to some rares on how to find them
 
 version 1.0
 - Initial release version
