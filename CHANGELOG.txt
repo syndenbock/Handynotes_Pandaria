@@ -1,3 +1,6 @@
+version 1.1.1
+- Fixed an achievement error specific to Horde characters
+
 version 1.1
 - Added TomTom waypoint support
 - Added option to toggle minimap icons
