@@ -136,7 +136,7 @@ if (UnitFactionGroup('player') == 'Alliance') then
     },
   };
 else
-  shared.achievementData.static[7932] = {
+  shared.achievementData.rares.static[7932] = {
     {
       id = 68318,
       index = 1,

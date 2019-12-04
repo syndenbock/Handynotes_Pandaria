@@ -98,5 +98,8 @@ shared.rareData = {
   [72049] = {
     description = 'Kite a Fishgorged Crane from the south onto the corpse.'
   },
+  [72048] = {
+    description = 'Talk to Captain Zvezdan in the underwater shipwreck.'
+  },
 };
 
