@@ -1,3 +1,6 @@
+version 1.1.2
+- Fixed an error when toy data is not available
+
 version 1.1.1
 - Fixed an achievement error specific to Horde characters
 

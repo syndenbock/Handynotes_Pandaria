@@ -40,7 +40,6 @@ addon.on('GET_ITEM_INFO_RECEIVED', function (itemId, success)
 
     info.name = itemInfo[1];
     addon.yell('DATA_READY', info);
-    print('data ready');
   end
 
   pendingData[itemId] = nil;
@@ -103,8 +102,8 @@ local function getAchievementInfo (rareData)
     if (not info.completed) then
       totalInfo.completed = false;
     end
-    totalInfo.icon = totalInfo.icon or info.icon;
 
+    totalInfo.icon = totalInfo.icon or info.icon;
     list[x] = info;
   end
 
@@ -132,14 +131,14 @@ local function getToyInfo (rareData)
 
     -- data is not cached yet
     if (toyName == nil) then
+      toyName = 'waiting for data...';
       pendingData[toy] = info;
-      info.name = 'waiting for data...';
       info.icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
-      print('data pending');
     else
-      info.name = toyName;
       info.icon = toyInfo[10] or ICON_MAP.skullGreen;
     end
+
+    info.name = toyName;
 
     if (info.collected) then
       toyName = setTextColor(toyName, COLOR_MAP.green);
@@ -237,7 +236,7 @@ local function getTreasureInfo (nodeData)
   local treasureData = treasureInfo[treasureId];
 
   if (treasureData == nil) then
-    print('no information about treasure:', treasureId);
+    -- print('no information about treasure:', treasureId);
     return nil;
   end
 
