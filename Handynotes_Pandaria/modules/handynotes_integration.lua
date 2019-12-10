@@ -159,10 +159,18 @@ do
     if (not level) then return end
 
     if (level == 1) then
+      UIDropDownMenu_AddButton({
+          text = 'HandyNotes Pandaria',
+          isTitle = true,
+          notCheckable = true,
+          notClickable = true,
+        }, level)
+
       if (IsAddOnLoaded('TomTom')) then
         UIDropDownMenu_AddButton({
           text = 'Add TomTom waypoint',
           func = addTomTomWaypoint,
+          notCheckable = true,
           arg1 = clickedMapId,
           arg2 = clickedCoord,
         }, level)
