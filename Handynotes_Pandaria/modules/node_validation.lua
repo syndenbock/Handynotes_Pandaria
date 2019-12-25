@@ -8,6 +8,8 @@ local playerFaction;
 local dataCache;
 local pendingData = {};
 
+local nodeHider = addon.import('nodeHider');
+
 local ICON_MAP = {
   question = 'Interface\\Icons\\inv_misc_questionmark',
   skullGray = 'Interface\\Addons\\Handynotes_Pandaria\\icons\\RareIcon.tga',
@@ -321,6 +323,12 @@ local function interpreteNodeInfo (nodeInfo)
 end
 
 local function getNodeInfo (zone, coords)
+  if (nodeHider.isHidden(zone, coords)) then
+    return {
+      display = false,
+    };
+  end
+
   local nodeCache = dataCache.nodes;
 
   if (nodeCache[zone] ~= nil and nodeCache[zone][coords] ~= nil) then

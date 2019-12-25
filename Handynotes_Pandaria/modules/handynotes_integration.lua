@@ -9,6 +9,7 @@ local tooltip;
 local dropdown;
 
 local infoProvider = addon.import('infoProvider');
+local nodeHider = addon.import('nodeHider');
 
 local function makeIterator (zones, isMinimap)
   local zoneIndex, zone = next(zones, nil);
@@ -123,6 +124,10 @@ addon.listen('DATA_READY', function (info, id)
   end
 end);
 
+local function updateNodes ()
+  HandyNotes:SendMessage('HandyNotes_NotifyUpdate', addonName);
+end
+
 local function replaceTable (oldTable, newTable)
   -- this clears the table without destroying old references
   table.wipe(oldTable);
@@ -134,6 +139,10 @@ end
 
 -- node menu handling
 do
+  local function CloseDropDown (button, level)
+    CloseDropDownMenus(level);
+  end
+
   local function addTomTomWaypoint(button, mapId, coords)
     if TomTom then
       local x, y = HandyNotes:getXY(coords);
@@ -160,21 +169,50 @@ do
 
     if (level == 1) then
       UIDropDownMenu_AddButton({
-          text = 'HandyNotes Pandaria',
-          isTitle = true,
-          notCheckable = true,
-          notClickable = true,
-        }, level)
+        text = 'HandyNotes Pandaria',
+        isTitle = true,
+        notCheckable = true,
+        notClickable = true,
+      }, level);
 
       if (IsAddOnLoaded('TomTom')) then
         UIDropDownMenu_AddButton({
           text = 'Add TomTom waypoint',
-          func = addTomTomWaypoint,
           notCheckable = true,
+          func = addTomTomWaypoint,
           arg1 = clickedMapId,
           arg2 = clickedCoord,
-        }, level)
+        }, level);
       end
+
+      UIDropDownMenu_AddButton({
+        text = 'Hide this node',
+        notCheckable = true,
+        arg1 = clickedMapId,
+        arg2 = clickedCoord,
+        func = function (button, zone, coords)
+          nodeHider.hide(zone, coords);
+          updateNodes();
+        end,
+      }, level);
+
+      UIDropDownMenu_AddButton({
+        text = 'Restore hidden nodes in this zone',
+        notCheckable = true,
+        func = function (button, zone, coords)
+          nodeHider.restoreZoneNodes(zone);
+          updateNodes();
+        end,
+        arg1 = clickedMapId,
+        arg2 = clickedCoord,
+      }, level);
+
+      UIDropDownMenu_AddButton({
+        text = 'Close',
+        func = CloseDropDown,
+        notCheckable = true,
+        arg1 = level,
+      }, level);
     end
   end;
 
@@ -204,10 +242,6 @@ local function validateSettings (config, defaults)
   replaceTable(config, new);
 end
 
-local function updateNodes ()
-  HandyNotes:SendMessage('HandyNotes_NotifyUpdate', addonName);
-end
-
 local function registerWithHandyNotes ()
   local defaults = {
     icon_scale = 1,
@@ -228,10 +262,10 @@ local function registerWithHandyNotes ()
 
   local options = {
     type = "group",
-    name = 'Handynotes Pandaria',
-    desc = 'Handynotes Pandaria',
-    get = function(info) return settings[info.arg] end,
-    set = function(info, v)
+    name = 'Pandaria',
+    desc = 'Rares and treasures in Pandaria',
+    get = function (info) return settings[info.arg] end,
+    set = function (info, v)
       settings[info.arg] = v;
       updateNodes();
     end,
@@ -260,6 +294,17 @@ local function registerWithHandyNotes ()
         desc = 'The alpha transparency of the icons',
         min = 0, max = 1, step = 0.01,
         arg = 'icon_alpha',
+        width = 'normal',
+      },
+      reset_nodes = {
+        order = 4,
+        type = 'execute',
+        name = 'Restore hidden nodes',
+        desc = 'Shows manually hidden nodes again',
+        func = function ()
+          nodeHider.restoreAllNodes();
+          updateNodes();
+        end,
         width = 'normal',
       },
     },

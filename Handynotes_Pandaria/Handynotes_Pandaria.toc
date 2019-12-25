@@ -19,6 +19,7 @@ data\toys.lua
 data\achievements.lua
 
 # modules
+modules\node_hiding.lua
 modules\data_parsing.lua
 modules\node_validation.lua
 modules\handynotes_integration.lua
