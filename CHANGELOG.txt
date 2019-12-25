@@ -1,3 +1,6 @@
+version 1.2
+- Added option to hide nodes by right-clicking them
+
 version 1.1.2
 - Fixed an error when toy data is not available
 
