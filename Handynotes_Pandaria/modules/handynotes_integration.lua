@@ -247,6 +247,12 @@ local function registerWithHandyNotes ()
     icon_scale = 1,
     icon_alpha = 1,
     minimap_icons = true,
+    show_rares = true,
+    show_treasures = true,
+    show_mounts = true,
+    show_toys = true,
+    show_achievements = true,
+    show_special_rares = true,
   };
 
   if (storedData == nil) then
@@ -260,6 +266,8 @@ local function registerWithHandyNotes ()
   settings = storedData.settings;
   validateSettings(settings, defaults);
 
+  addon.yell('SETTINGS_LOADED', settings);
+
   local options = {
     type = "group",
     name = 'Pandaria',
@@ -270,43 +278,105 @@ local function registerWithHandyNotes ()
       updateNodes();
     end,
     args = {
-      minimap_icons = {
-        order = 1,
-        type = 'toggle',
-        name = 'Minimap icons',
-        desc = 'Show items on the minimap',
-        arg = 'minimap_icons',
-        width = 'full',
+      icon_settings = {
+        type = "group",
+        name = "Icon settings",
+        inline = true,
+        args = {
+          icon_scale = {
+            order = 1,
+            type = 'range',
+            name = 'Icon Scale',
+            desc = 'The scale of the icons',
+            min = 0.5, max = 3, step = 0.1,
+            arg = 'icon_scale',
+            width = 'normal',
+          },
+          icon_alpha = {
+            order = 2,
+            type = 'range',
+            name = 'Icon Alpha',
+            desc = 'The alpha transparency of the icons',
+            min = 0, max = 1, step = 0.01,
+            arg = 'icon_alpha',
+            width = 'normal',
+          },
+          minimap_icons = {
+            order = 3,
+            type = 'toggle',
+            name = 'Show icons on the minimap',
+            desc = 'Show icons on the minimap',
+            arg = 'minimap_icons',
+            width = 'full',
+          },
+          show_rares = {
+            order = 4,
+            type = 'toggle',
+            name = 'Show rares',
+            desc = 'Show nodes of rare mobs',
+            arg = 'show_rares',
+            width = 'full',
+          },
+          show_treasures = {
+            order = 5,
+            type = 'toggle',
+            name = 'Show treasures',
+            desc = 'Show nodes of treasures',
+            arg = 'show_treasures',
+            width = 'full',
+          },
+        }
       },
-      icon_scale = {
-        order = 2,
-        type = 'range',
-        name = 'Icon Scale',
-        desc = 'The scale of the icons',
-        min = 0.5, max = 3, step = 0.1,
-        arg = 'icon_scale',
-        width = 'normal',
-      },
-      icon_alpha = {
-        order = 3,
-        type = 'range',
-        name = 'Icon Alpha',
-        desc = 'The alpha transparency of the icons',
-        min = 0, max = 1, step = 0.01,
-        arg = 'icon_alpha',
-        width = 'normal',
-      },
-      reset_nodes = {
-        order = 4,
-        type = 'execute',
-        name = 'Restore hidden nodes',
-        desc = 'Shows manually hidden nodes again',
-        func = function ()
-          nodeHider.restoreAllNodes();
-          updateNodes();
-        end,
-        width = 'normal',
-      },
+      visibility_settings = {
+        type = "group",
+        name = "Show rares when they:",
+        inline = true,
+        args = {
+          show_mounts = {
+            order = 1,
+            type = 'toggle',
+            name = 'drop an uncollected mount',
+            desc = 'drop an uncollected mount',
+            arg = 'show_mounts',
+            width = 'full',
+          },
+          show_toys = {
+            order = 2,
+            type = 'toggle',
+            name = 'drop an uncollected toy',
+            desc = 'drop an uncollected toy',
+            arg = 'show_toys',
+            width = 'full',
+          },
+          show_achievements = {
+            order = 3,
+            type = 'toggle',
+            name = 'are required for an achievement',
+            desc = 'are required for an achievement',
+            arg = 'show_achievements',
+            width = 'full',
+          },
+          show_special_rares = {
+            order = 4,
+            type = 'toggle',
+            name = 'drop a useful item',
+            desc = 'drop a useful item',
+            arg = 'show_special_rares',
+            width = 'full',
+          },
+          reset_nodes = {
+            order = 5,
+            type = 'execute',
+            name = 'Restore hidden nodes',
+            desc = 'Shows manually hidden nodes again',
+            func = function()
+              nodeHider.restoreAllNodes();
+              updateNodes();
+            end,
+            width = 'normal',
+          },
+        }
+      }
     },
   };
 

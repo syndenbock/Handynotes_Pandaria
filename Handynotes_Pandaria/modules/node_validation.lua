@@ -6,6 +6,7 @@ local treasureInfo = shared.treasureData;
 local nodes = shared.nodeData;
 local playerFaction;
 local dataCache;
+local settings = {};
 local pendingData = {};
 
 local nodeHider = addon.import('nodeHider');
@@ -27,6 +28,10 @@ local COLOR_MAP = {
   green = '|cFF00FF00',
   yellow = '|cFFFFFF00',
 };
+
+addon.listen('SETTINGS_LOADED', function (_settings)
+  settings = _settings;
+end);
 
 addon.on('PLAYER_LOGIN', function ()
   playerFaction = UnitFactionGroup('player');
@@ -260,7 +265,7 @@ end
 local function interpreteNodeInfo (nodeInfo)
   local rareInfo = nodeInfo.rareInfo;
 
-  if (rareInfo ~= nil) then
+  if (settings.show_rares == true and rareInfo ~= nil) then
     if (rareInfo.questCompleted == true) then
       nodeInfo.display = false;
       return;
@@ -268,7 +273,7 @@ local function interpreteNodeInfo (nodeInfo)
 
     local mountInfo = rareInfo.mountInfo;
 
-    if (mountInfo ~= nil) then
+    if (settings.show_mounts == true and mountInfo ~= nil) then
       if (mountInfo.collected == false) then
         nodeInfo.icon = mountInfo.icon or ICON_MAP.skullPurple;
         nodeInfo.display = true;
@@ -278,7 +283,7 @@ local function interpreteNodeInfo (nodeInfo)
 
     local toyInfo = rareInfo.toyInfo;
 
-    if (toyInfo ~= nil) then
+    if (settings.show_toys == true and toyInfo ~= nil) then
       if (toyInfo.collected == false) then
         nodeInfo.icon = toyInfo.icon or ICON_MAP.skullGreen;
         nodeInfo.display = true;
@@ -288,7 +293,7 @@ local function interpreteNodeInfo (nodeInfo)
 
     local achievementInfo = rareInfo.achievementInfo;
 
-    if (achievementInfo ~= nil) then
+    if (settings.show_achievements == true and achievementInfo ~= nil) then
       if (achievementInfo.completed == false) then
 --        nodeInfo.icon = achievementInfo.icon;
         nodeInfo.icon = ICON_MAP.skullYellow;
@@ -297,7 +302,7 @@ local function interpreteNodeInfo (nodeInfo)
       end
     end
 
-    if (rareInfo.special == true) then
+    if (settings.show_special_rares == true and rareInfo.special == true) then
       nodeInfo.icon = ICON_MAP.skullBlue;
       nodeInfo.display = true;
       return;
@@ -308,7 +313,7 @@ local function interpreteNodeInfo (nodeInfo)
 
   local treasureInfo = nodeInfo.treasureInfo;
 
-  if (treasureInfo ~= nil) then
+  if (settings.show_treasures and treasureInfo ~= nil) then
     if (treasureInfo.collected == false) then
       nodeInfo.icon = treasureInfo.icon;
       nodeInfo.display = true;
