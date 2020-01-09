@@ -1,6 +1,6 @@
 ## Interface: 80250
 ## Title: Handynotes Pandaria
-## Version: 1.2
+## Version: 1.3
 ## Notes: Shows locations of treasures and rares in Pandaria
 ## Author: syndenbock
 ## RequiredDeps: HandyNotes
