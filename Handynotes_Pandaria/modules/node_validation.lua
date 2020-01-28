@@ -308,7 +308,6 @@ local function interpreteNodeInfo (nodeInfo)
       return;
     end
 
-
     if (settings.always_show_rares == true) then
       nodeInfo.display = true;
       nodeInfo.icon = ICON_MAP.skullGray;

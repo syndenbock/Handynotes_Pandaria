@@ -249,11 +249,11 @@ local function registerWithHandyNotes ()
     minimap_icons = true,
     show_rares = true,
     show_treasures = true,
+    always_show_rares = false,
     show_mounts = true,
     show_toys = true,
     show_achievements = true,
     show_special_rares = true,
-    always_show_rares = false,
   };
 
   if (storedData == nil) then
@@ -333,8 +333,16 @@ local function registerWithHandyNotes ()
         name = "Show rares when they:",
         inline = true,
         args = {
-          show_mounts = {
+          always_show_rares = {
             order = 1,
+            type = 'toggle',
+            name = 'exist (always)',
+            desc = 'exist (always)',
+            arg = 'always_show_rares',
+            width = 'full',
+          },
+          show_mounts = {
+            order = 2,
             type = 'toggle',
             name = 'drop an uncollected mount',
             desc = 'drop an uncollected mount',
@@ -342,7 +350,7 @@ local function registerWithHandyNotes ()
             width = 'full',
           },
           show_toys = {
-            order = 2,
+            order = 3,
             type = 'toggle',
             name = 'drop an uncollected toy',
             desc = 'drop an uncollected toy',
@@ -350,7 +358,7 @@ local function registerWithHandyNotes ()
             width = 'full',
           },
           show_achievements = {
-            order = 3,
+            order = 4,
             type = 'toggle',
             name = 'are required for an achievement',
             desc = 'are required for an achievement',
@@ -358,23 +366,15 @@ local function registerWithHandyNotes ()
             width = 'full',
           },
           show_special_rares = {
-            order = 4,
+            order = 5,
             type = 'toggle',
             name = 'drop a useful item',
             desc = 'drop a useful item',
             arg = 'show_special_rares',
             width = 'full',
           },
-          always_show_rares = {
-            order = 4,
-            type = 'toggle',
-            name = 'exist (always)',
-            desc = 'exist (always)',
-            arg = 'always_show_rares',
-            width = 'full',
-          },
           reset_nodes = {
-            order = 5,
+            order = 6,
             type = 'execute',
             name = 'Restore hidden nodes',
             desc = 'Shows manually hidden nodes again',
