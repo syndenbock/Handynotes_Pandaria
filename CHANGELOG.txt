@@ -1,3 +1,6 @@
+version 1.4
+- Added option to always show rares
+
 version 1.3.1
 - Updated toc version
 
