@@ -295,7 +295,7 @@ local function interpreteNodeInfo (nodeInfo)
 
     if (settings.show_achievements == true and achievementInfo ~= nil) then
       if (achievementInfo.completed == false) then
---        nodeInfo.icon = achievementInfo.icon;
+        -- nodeInfo.icon = achievementInfo.icon;
         nodeInfo.icon = ICON_MAP.skullYellow;
         nodeInfo.display = true;
         return;
@@ -308,12 +308,17 @@ local function interpreteNodeInfo (nodeInfo)
       return;
     end
 
-    nodeInfo.icon = ICON_MAP.skullGray;
+
+    if (settings.always_show_rares == true) then
+      nodeInfo.display = true;
+      nodeInfo.icon = ICON_MAP.skullGray;
+      return;
+    end
   end
 
   local treasureInfo = nodeInfo.treasureInfo;
 
-  if (settings.show_treasures and treasureInfo ~= nil) then
+  if (settings.show_treasures == true and treasureInfo ~= nil) then
     if (treasureInfo.collected == false) then
       nodeInfo.icon = treasureInfo.icon;
       nodeInfo.display = true;

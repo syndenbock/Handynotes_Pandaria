@@ -253,6 +253,7 @@ local function registerWithHandyNotes ()
     show_toys = true,
     show_achievements = true,
     show_special_rares = true,
+    always_show_rares = false,
   };
 
   if (storedData == nil) then
@@ -362,6 +363,14 @@ local function registerWithHandyNotes ()
             name = 'drop a useful item',
             desc = 'drop a useful item',
             arg = 'show_special_rares',
+            width = 'full',
+          },
+          always_show_rares = {
+            order = 4,
+            type = 'toggle',
+            name = 'exist (always)',
+            desc = 'exist (always)',
+            arg = 'always_show_rares',
             width = 'full',
           },
           reset_nodes = {
