@@ -22,6 +22,8 @@ local function truncate (number, digits)
 end
 
 local function readVignette (guid)
+  if (guid == nil or currentMapId == nil) then return end
+
   local info = GetVignetteInfo(guid);
 
   if (info == nil) then return end
