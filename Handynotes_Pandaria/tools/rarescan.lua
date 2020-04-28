@@ -46,7 +46,7 @@ local function scanVignettes ()
   end
 end
 
-addon.on({'PLAYER_ENTERING_WORLD', 'ZONE_CHANGED_NEW_AREA'}, function ()
+addon.on({'ZONE_CHANGED_NEW_AREA'}, function ()
   currentMapId = C_Map.GetBestMapForUnit('player');
 
   -- scanningActive = (currentMapId == newValeMapId);
