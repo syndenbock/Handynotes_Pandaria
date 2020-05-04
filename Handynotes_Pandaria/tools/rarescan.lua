@@ -7,7 +7,6 @@ local GetVignettePosition = C_VignetteInfo.GetVignettePosition;
 
 local addon = shared.addon;
 
-local newValeMapId = 1530;
 local scanningActive = false;
 local currentMapId;
 
@@ -46,23 +45,26 @@ local function scanVignettes ()
   end
 end
 
-addon.on({'ZONE_CHANGED_NEW_AREA'}, function ()
+addon.on({'ZONE_CHANGED_NEW_AREA', 'PLAYER_LOGIN'}, function ()
+  local scan = true;
+
   currentMapId = C_Map.GetBestMapForUnit('player');
 
-  -- scanningActive = (currentMapId == newValeMapId);
-  scanningActive = true;
+  if (scanningActive ~= scan) then
+    scanningActive = scan;
 
-  if (scanningActive) then
-    print('enabled rare scanning');
-    scanVignettes();
-  else
-    print('disabled rare scanning');
+    if (scan) then
+      print('enabled rare scanning');
+      scanVignettes();
+    else
+      print('disabled rare scanning');
+    end
   end
 end);
 
 addon.on('VIGNETTE_MINIMAP_UPDATED', function (guid, onMinimap)
   if (scanningActive == false or onMinimap == false) then
-    return
+    return;
   end
 
   readVignette(guid);
