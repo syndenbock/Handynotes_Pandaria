@@ -27,4 +27,3 @@ modules\handynotes_integration.lua
 # tools
 # tools\convert.lua
 # tools\datacheck.lua
-tools\rarescan.lua
