@@ -1,4 +1,6 @@
-local addonName, shared = ...;
+local _, shared = ...;
+
+local IsQuestFlaggedCompleted = _G.C_QuestLog.IsQuestFlaggedCompleted;
 
 local addon = shared.addon;
 local rareData = shared.rareData;
