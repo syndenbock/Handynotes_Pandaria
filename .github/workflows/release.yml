@@ -31,15 +31,3 @@ jobs:
       # Release retail
       - name: Release Retail
         uses: BigWigsMods/packager@master
-
-      # Release Classic
-      - name: Release Classic
-        uses: BigWigsMods/packager@master
-        with:
-          args: -g classic
-
-      # Release BCC
-      - name: Release BCC
-        uses: BigWigsMods/packager@master
-        with:
-          args: -g bcc
