@@ -2,6 +2,8 @@ local addonName, shared = ...;
 
 if _G.LibStub == nil then return end
 
+local C_Timer = _G.C_Timer;
+
 shared.HandyNotes = _G.LibStub('AceAddon-3.0'):GetAddon('HandyNotes', true)
 
 if shared.HandyNotes == nil then return end
@@ -13,7 +15,7 @@ local addon = shared.addon;
 -- event handling
 do
   local events = {};
-  local addonFrame = CreateFrame('frame');
+  local addonFrame = _G.CreateFrame('frame');
 
   addon.on = function (eventList, callback)
     if (type(eventList) ~= 'table') then
@@ -84,7 +86,6 @@ do
 
   addon.listen = function (message, callback)
     callbacks[message] = callbacks[message] or {};
-
     table.insert(callbacks[message], callback);
   end
 

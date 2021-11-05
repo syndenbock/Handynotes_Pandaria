@@ -1,15 +1,20 @@
 local addonName, shared = ...;
 
+local wipe = _G.wipe;
+
 local addon = shared.addon;
 
 local module = {};
 local hiddenNodes;
 
 addon.on('PLAYER_LOGIN', function ()
+  local storedData = _G.storedData;
+
   if (storedData == nil) then
       storedData = {
         hiddenNodes = {},
       };
+      _G.storedData = storedData;
   elseif (storedData.hiddenNodes == nil) then
     storedData.hiddenNodes = {};
   end
@@ -31,7 +36,7 @@ module.restoreZoneNodes = function (zone)
 end
 
 module.restoreAllNodes = function (zone)
-  table.wipe(hiddenNodes);
+  wipe(hiddenNodes);
 end
 
 addon.export('nodeHider', module);

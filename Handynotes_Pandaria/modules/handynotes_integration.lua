@@ -1,12 +1,23 @@
 local addonName, shared = ...;
 
+local CloseDropDownMenus = _G.CloseDropDownMenus;
+local GameTooltip = _G.GameTooltip;
+local IsAddOnLoaded = _G.IsAddOnLoaded;
+local ToggleDropDownMenu = _G.ToggleDropDownMenu;
+local TomTom = _G.TomTom;
+local UIDropDownMenu_AddButton = _G.UIDropDownMenu_AddButton;
+local UIParent = _G.UIParent;
+local wipe = _G.wipe;
+local WorldMapButton = _G.WorldMapButton;
+local WorldMapTooltip = _G.WorldMapTooltip;
+
 local addon = shared.addon;
 local HandyNotes = shared.HandyNotes;
 local nodes = shared.nodeData;
 local handler = {};
 local settings;
 local tooltip;
-local dropdown;
+local currentInfo;
 
 local infoProvider = addon.import('infoProvider');
 local nodeHider = addon.import('nodeHider');
@@ -78,8 +89,8 @@ local function addTooltipText (tooltip, info, header)
   end
 end
 
-function displayTooltip (nodeInfo)
-  nodeData = nodeInfo.rareInfo or nodeInfo.treasureInfo;
+local function displayTooltip (nodeInfo)
+  local nodeData = nodeInfo.rareInfo or nodeInfo.treasureInfo;
 
   tooltip:SetText(nodeData.name or nodeInfo.rare or nodeInfo.treasure);
   -- tooltip:SetText(nodeData.name .. ' ' .. (node.rare or node.treasure));
@@ -120,7 +131,7 @@ end
 
 addon.listen('DATA_READY', function (info, id)
   if (currentInfo == info) then
-    displayTooltip(nodeInfo);
+    displayTooltip(currentInfo);
   end
 end);
 
@@ -130,7 +141,7 @@ end
 
 local function replaceTable (oldTable, newTable)
   -- this clears the table without destroying old references
-  table.wipe(oldTable);
+  wipe(oldTable);
 
   for key, value in pairs(newTable) do
     oldTable[key] = value;
@@ -159,7 +170,7 @@ do
     end
   end
 
-  local dropdown = CreateFrame('Frame', 'HandyNotes_Pandaria_DropdownMenu');
+  local dropdown = _G.CreateFrame('Frame', 'HandyNotes_Pandaria_DropdownMenu');
   local clickedMapId;
   local clickedCoord;
 
@@ -391,7 +402,6 @@ local function registerWithHandyNotes ()
 
   HandyNotes:RegisterPluginDB(addonName, handler, options);
 end
-
 
 addon.on('PLAYER_LOGIN', function ()
   registerWithHandyNotes();
