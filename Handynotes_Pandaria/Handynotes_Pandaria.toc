@@ -11,6 +11,11 @@
 # addon files
 HandyNotes_Pandaria.lua
 
+# core files
+core\Events.lua
+core\EventFunnel.lua
+core\Yell.lua
+
 # data files
 data\nodes.lua
 data\rares.lua

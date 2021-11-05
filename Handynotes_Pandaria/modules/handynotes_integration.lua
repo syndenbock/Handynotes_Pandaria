@@ -405,6 +405,6 @@ end
 
 addon.on('PLAYER_LOGIN', function ()
   registerWithHandyNotes();
-  addon.funnel({'CRITERIA_UPDATE'}, 2, updateNodes);
+  addon.funnel({'CRITERIA_UPDATE'}, updateNodes);
   addon.on({'NEW_TOY_ADDED', 'NEW_MOUNT_ADDED'}, updateNodes);
 end);
