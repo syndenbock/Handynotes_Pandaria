@@ -1,14 +1,27 @@
 local _, shared = ...;
 
+local GetAchievementCriteriaInfo = _G.GetAchievementCriteriaInfo;
+local GetAchievementInfo = _G.GetAchievementInfo;
+local GetAchievementNumCriteria = _G.GetAchievementNumCriteria;
+local GetItemIcon = _G.GetItemIcon;
+local GetItemInfo = _G.GetItemInfo;
+local GetMountInfoByID = _G.C_MountJournal.GetMountInfoByID;
 local IsQuestFlaggedCompleted = _G.C_QuestLog.IsQuestFlaggedCompleted;
+local Item = _G.Item;
+local PlayerHasToy = _G.PlayerHasToy;
+local wipe = _G.wipe;
 
 local addon = shared.addon;
 local rareData = shared.rareData;
 local treasureInfo = shared.treasureData;
 local nodes = shared.nodeData;
-local playerFaction;
-local dataCache;
 local settings = {};
+local playerFaction;
+local dataCache = {
+  rares = {},
+  treasures = {},
+  nodes = {},
+};
 
 local nodeHider = addon.import('nodeHider');
 
@@ -35,7 +48,7 @@ addon.listen('SETTINGS_LOADED', function (_settings)
 end);
 
 addon.on('PLAYER_LOGIN', function ()
-  playerFaction = UnitFactionGroup('player');
+  playerFaction = _G.UnitFactionGroup('player');
 end);
 
 local function setTextColor (text, color)
@@ -179,7 +192,7 @@ local function getMountInfo (rareData)
 
   for x = 1, #mountList, 1 do
     local mountId = mountList[x];
-    local mountInfo = {C_MountJournal.GetMountInfoByID(mountId)};
+    local mountInfo = {GetMountInfoByID(mountId)};
     local mountName = mountInfo[1];
     local info = {
       icon = mountInfo[3] or ICON_MAP.skullOrange,
@@ -370,18 +383,12 @@ local function getNodeInfo (zone, coords)
 end
 
 local function flush ()
-  dataCache = {
-    rares = {},
-    treasures = {},
-    nodes = {},
-  };
+  wipe(dataCache.rares);
+  wipe(dataCache.treasures);
+  wipe(dataCache.nodes);
 end
 
-flush();
-
-local module = {
+addon.export('infoProvider', {
   getNodeInfo = getNodeInfo,
   flush = flush,
-};
-
-addon.export('infoProvider', module);
+});
