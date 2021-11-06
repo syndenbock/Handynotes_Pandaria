@@ -6,6 +6,7 @@ local GetAchievementNumCriteria = _G.GetAchievementNumCriteria;
 local GetItemIcon = _G.GetItemIcon;
 local GetItemInfo = _G.GetItemInfo;
 local GetMountInfoByID = _G.C_MountJournal.GetMountInfoByID;
+local IsItemDataCachedByID = _G.C_Item.IsItemDataCachedByID;
 local IsQuestFlaggedCompleted = _G.C_QuestLog.IsQuestFlaggedCompleted;
 local Item = _G.Item;
 local PlayerHasToy = _G.PlayerHasToy;
@@ -15,7 +16,7 @@ local addon = shared.addon;
 local rareData = shared.rareData;
 local treasureInfo = shared.treasureData;
 local nodes = shared.nodeData;
-local settings = {};
+local saved = shared.saved;
 local playerFaction;
 local dataCache = {
   rares = {},
@@ -43,10 +44,6 @@ local COLOR_MAP = {
   yellow = '|cFFFFFF00',
 };
 
-addon.listen('SETTINGS_LOADED', function (_settings)
-  settings = _settings;
-end);
-
 addon.on('PLAYER_LOGIN', function ()
   playerFaction = _G.UnitFactionGroup('player');
 end);
@@ -67,7 +64,7 @@ local function queryItem (itemId, info)
     info.name = data[1];
     info.icon = data[10];
 
-    addon.yell('DATA_READY', info);
+    addon.yell('DATA_READY', info, itemId);
   end);
 end
 
@@ -152,14 +149,12 @@ local function getToyInfo (rareData)
     };
 
     -- data is not cached yet
-    if (toyName == nil) then
-      toyName = 'waiting for data...';
-
-      queryItem(toy);
-
-      info.icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
-    else
+    if (IsItemDataCachedByID(toy)) then
       info.icon = toyInfo[10] or ICON_MAP.skullGreen;
+    else
+      toyName = 'waiting for data...';
+      queryItem(toy, info);
+      info.icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
     end
 
     info.name = toyName;
@@ -281,6 +276,7 @@ end
 
 local function interpreteNodeInfo (nodeInfo)
   local rareInfo = nodeInfo.rareInfo;
+  local settings = saved.settings;
 
   if (settings.show_rares == true and rareInfo ~= nil) then
     if (rareInfo.questCompleted == true) then

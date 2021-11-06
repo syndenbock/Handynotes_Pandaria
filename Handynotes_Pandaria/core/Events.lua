@@ -18,6 +18,14 @@ local function addCallback (event, callback)
   end
 end
 
+local function removeCallback (event, callback)
+  callbacks[event][callback] = nil;
+
+  if (next(callbacks[event]) == nil) then
+    eventFrame:UnregisterEvent(event);
+  end
+end
+
 local function callForEvents (events, callback, method)
   assert(type(callback) == 'function',
     addonName .. ': callback is not a function');
@@ -37,4 +45,8 @@ end
 
 function shared.addon.on (events, callback)
   callForEvents(events, callback, addCallback);
+end
+
+function shared.addon.off (events, callback)
+  callForEvents(events, callback, removeCallback);
 end

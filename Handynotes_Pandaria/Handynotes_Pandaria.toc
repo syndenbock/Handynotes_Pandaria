@@ -6,7 +6,7 @@
 ## Author: syndenbock
 ## RequiredDeps: HandyNotes
 ## OptionalDeps: TomTom
-## SavedVariables: storedData
+## SavedVariables: HandyNotes_Pandaria_savedData
 
 # addon files
 HandyNotes_Pandaria.lua
@@ -25,6 +25,7 @@ data\toys.lua
 data\achievements.lua
 
 # modules
+modules\savedData.lua
 modules\node_hiding.lua
 modules\data_parsing.lua
 modules\node_validation.lua
