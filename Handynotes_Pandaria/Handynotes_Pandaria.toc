@@ -1,4 +1,4 @@
-## Interface: 90200
+## Interface: 90205
 ## Title: Handynotes Pandaria
 ## X-Curse-Project-ID: 352950
 ## Version: 1.5.1
