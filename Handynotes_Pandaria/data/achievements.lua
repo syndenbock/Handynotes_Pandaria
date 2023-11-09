@@ -36,42 +36,26 @@ shared.achievementData = {
       [8101] = {
         {
           id = 69471,
-          description = 'Inside a cave in the wall near coast to the West. \nNeeds 3x Shan\'ze Ritual Stone to summon',
-        },
-        {
+        }, {
           id = 69633,
-          description = 'Needs 3x Shan\'ze Ritual Stone to summon',
-        },
-        {
+        }, {
           id = 69341,
-          description = 'Needs 3x Shan\'ze Ritual Stone to summon',
-        },
-        {
+        }, {
           id = 69339,
-          description = 'Needs 3x Shan\'ze Ritual Stone to summon',
-        },
-        {
+        }, {
           id = 69749,
-          description = 'Needs 3x Shan\'ze Ritual Stone to summon',
-        },
-        {
+        }, {
           id = 69767,
-          description = 'Needs 3x Shan\'ze Ritual Stone to summon',
-        },
-        {
+        }, {
           id = 70080,
-          description = 'Needs 3x Shan\'ze Ritual Stone to summon',
-        },
-        {
+        }, {
           id = 69396,
-          description = 'Needs 3x Shan\'ze Ritual Stone to summon',
-        },
-        {
+        }, {
           id = 69347,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
-      }
-    }
+      },
+    },
   },
   treasures = {
     static = {
@@ -94,7 +78,7 @@ shared.achievementData = {
         31426,
         31427,
         31428,
-      }
+      },
     },
   },
 }
@@ -104,11 +88,9 @@ if (_G.UnitFactionGroup('player') == 'Alliance') then
   shared.achievementData.rares.static[7932] = {
     {
       id = 68321,
-    },
-    {
+    }, {
       id = 68320,
-    },
-    {
+    }, {
       id = 68322,
     },
   };
@@ -116,11 +98,9 @@ else
   shared.achievementData.rares.static[7932] = {
     {
       id = 68318,
-    },
-    {
+    }, {
       id = 68317,
-    },
-    {
+    },  {
       id = 68319,
     },
   };
