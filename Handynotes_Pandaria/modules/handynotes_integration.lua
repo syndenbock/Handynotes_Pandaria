@@ -21,44 +21,28 @@ local currentInfo;
 local infoProvider = addon.import('infoProvider');
 local nodeHider = addon.import('nodeHider');
 
-local function makeIterator (zones, isMinimap)
-  local zoneIndex, zone = next(zones, nil);
-  local coords;
+local function iterateZoneNodes (zone, nodes)
+  for coords, node in pairs(nodes) do
+    local info = infoProvider.getNodeInfo(zone, coords);
 
-  local function iterator ()
-    local scale = saved.settings.icon_scale;
-    local alpha = saved.settings.icon_alpha;
-
-    while (zone) do
-      local zoneNodes = nodes[zone];
-
-      if (zoneNodes) then
-        coords = next(zoneNodes, coords);
-
-        while (coords) do
-          local info = infoProvider.getNodeInfo(zone, coords);
-
-          if (info == nil) then
-            local remCoords = coords;
-
-            -- get the next node before deleting, so next() knows the coords
-            coords = next(zoneNodes, coords);
-            zoneNodes[remCoords] = nil;
-          else
-            if (info.display) then
-              return coords, zone, info.icon, scale, alpha;
-            end
-
-            coords= next(zoneNodes, coords);
-          end
-        end
+    if (info ~= nil) then
+      if (info.display) then
+        coroutine.yield(coords, zone, info.icon, saved.settings.icon_scale, saved.settings.icon_alpha);
       end
-
-      zoneIndex, zone = next(zones, zoneIndex);
+    else
+      nodes[coords] = nil;
     end
   end
+end
 
-  return iterator;
+local function iterateZones (zones)
+  for _, zone in ipairs(zones) do
+    local zoneNodes = nodes[zone];
+
+    if (zoneNodes) then
+      iterateZoneNodes(zone, zoneNodes);
+    end
+  end
 end
 
 local function returnNil ()
@@ -79,7 +63,9 @@ function handler:GetNodes2(uiMapId, isMinimap)
 
   infoProvider.flush();
 
-  return makeIterator(zones, isMinimap);
+  return coroutine.wrap(function ()
+    iterateZones(zones);
+  end);
 end
 
 local function addTooltipText (tooltip, info, header)
