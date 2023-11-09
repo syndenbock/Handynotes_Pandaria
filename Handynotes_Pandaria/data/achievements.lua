@@ -1,6 +1,4 @@
-local addonName, shared = ...;
-
-local addon = shared.addon;
+local _, shared = ...;
 
 shared.achievementData = {
   rares = {
@@ -19,10 +17,8 @@ shared.achievementData = {
       [8078] = {
         {
           id = 69768,
-          index = 1,
         }, {
           id = 69769,
-          index = 2,
         }
       },
       -- there are two npcs named "Archiereus of Flame" and therefor the Achievement
@@ -40,47 +36,38 @@ shared.achievementData = {
       [8101] = {
         {
           id = 69471,
-          index = 1,
           description = 'Inside a cave in the wall near coast to the West. \nNeeds 3x Shan\'ze Ritual Stone to summon',
         },
         {
           id = 69633,
-          index = 2,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
         {
           id = 69341,
-          index = 3,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
         {
           id = 69339,
-          index = 4,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
         {
           id = 69749,
-          index = 5,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
         {
           id = 69767,
-          index = 6,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
         {
           id = 70080,
-          index = 7,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
         {
           id = 69396,
-          index = 8,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
         {
           id = 69347,
-          index = 9,
           description = 'Needs 3x Shan\'ze Ritual Stone to summon',
         },
       }
@@ -117,30 +104,24 @@ if (_G.UnitFactionGroup('player') == 'Alliance') then
   shared.achievementData.rares.static[7932] = {
     {
       id = 68321,
-      index = 1,
     },
     {
       id = 68320,
-      index = 2,
     },
     {
       id = 68322,
-      index = 3,
     },
   };
 else
   shared.achievementData.rares.static[7932] = {
     {
       id = 68318,
-      index = 1,
     },
     {
       id = 68317,
-      index = 2,
     },
     {
       id = 68319,
-      index = 3,
     },
   };
 end

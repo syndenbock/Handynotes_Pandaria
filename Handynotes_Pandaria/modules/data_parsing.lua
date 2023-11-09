@@ -143,7 +143,7 @@ local function parseData ()
             end
 
             addRareAchievementInfo(rareData.id, achievement,
-                rareData.index or -1, rareData.description);
+                rareData.index or x, rareData.description);
           end
         end
       end
