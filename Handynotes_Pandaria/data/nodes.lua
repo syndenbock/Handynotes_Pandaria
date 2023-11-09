@@ -314,34 +314,34 @@ local nodeData = {
 }
 
 shared.nodeData = (function ()
+  local TYPE_RARE = 'rare';
+  local TYPE_TREASURE = 'treasure';
   local data = {};
 
-  for map, nodes in pairs (nodeData) do
-    local mapData = {};
+  local function addNode (mapId, coords, type, id)
+    local mapData = data[mapId];
 
-    data[map] = mapData;
+    if (mapData[coords] == nil) then
+      mapData[coords] = {};
+    elseif (mapData[coords][type] ~= nil) then
+      print('Node conflict. Map:', mapId, 'coords:', coords, 'type:', type);
+    end
+
+    mapData[coords][type] = id;
+  end
+
+  for mapId, nodes in pairs (nodeData) do
+    data[mapId] = {};
 
     if (nodes.rares) then
       for coords, rareId in pairs(nodes.rares) do
-        if (mapData[coords] == nil) then
-          mapData[coords] = {
-            rare = rareId,
-          };
-        else
-          print('Node in map', map, 'coords:', coords);
-        end
+        addNode(mapId, coords, TYPE_RARE, rareId);
       end
     end
 
     if (nodes.treasures) then
       for coords, treasureId in pairs(nodes.treasures) do
-        if (mapData[coords] == nil) then
-          mapData[coords] = {
-            treasure = treasureId,
-          };
-        else
-          print('Node in map', map, 'coords:', coords);
-        end
+        addNode(mapId, coords, TYPE_TREASURE, treasureId);
       end
     end
   end
