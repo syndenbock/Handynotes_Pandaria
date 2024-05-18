@@ -185,33 +185,36 @@ local function getMountInfo (rareData)
   if (mountList == nil) then return nil end
 
   local list = {};
-  local totalData = {
-    list = list,
-    collected = true,
-  };
+  local totalCollected = true;
+  local totalIcon;
 
   for x = 1, #mountList, 1 do
     local mountId = mountList[x];
     local mountInfo = {GetMountInfoByID(mountId)};
     local mountName = mountInfo[1];
-    local info = {
-      icon = mountInfo[3] or ICON_MAP.skullOrange,
-      collected = mountInfo[11],
-    };
+    local icon = mountInfo[3] or ICON_MAP.skullOrange;
+    local collected = mountInfo[11];
 
-    if (info.collected) then
+    if (collected) then
       mountName = setTextColor(mountName, COLOR_MAP.green);
     else
       mountName = setTextColor(mountName, COLOR_MAP.red);
-      totalData.collected = false;
-      totalData.icon = totalData.icon or info.icon;
+      totalCollected = false;
+      totalIcon = totalIcon or icon;
     end
 
-    info.text = mountName;
-    list[x] = info;
+    list[x] = {
+      collected = collected,
+      icon = icon,
+      text = mountName,
+    };
   end
 
-  return totalData;
+  return {
+    collected = totalCollected,
+    icon = totalIcon,
+    list = list,
+  };
 end
 
 local function getRareInfo (nodeData)
@@ -362,10 +365,8 @@ local function getNodeInfo (zone, coords)
     return nodeCache[zone][coords];
   end
 
-  local nodeData = nodes[zone];
+  local nodeData = nodes[zone] and nodes[zone][coords];
 
-  if (nodeData == nil) then return nil end
-  nodeData = nodeData[coords];
   if (nodeData == nil) then return nil end
 
   local info = {
