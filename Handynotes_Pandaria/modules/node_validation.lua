@@ -74,10 +74,8 @@ local function getAchievementInfo (rareData)
   if (achievementList == nil) then return nil end
 
   local list = {};
-  local totalInfo = {
-    list = list,
-    completed = true,
-  };
+  local totalCompleted = true;
+  local totalIcon;
 
   for x = 1, #achievementList, 1 do
     local achievementData = achievementList[x];
@@ -85,11 +83,9 @@ local function getAchievementInfo (rareData)
     local achievementInfo = {GetAchievementInfo(achievementId)};
     local text = achievementInfo[2];
     local completed = achievementInfo[4];
+    -- local completedOnThisCharacter = achievementInfo[13];
     local criteriaIndex = achievementData.index;
-    local fulfilled = false;
-    local info = {
-      icon = achievementInfo[10],
-    };
+    local icon = achievementInfo[10];
 
     if (completed) then
       text = setTextColor(text, COLOR_MAP.green);
@@ -103,10 +99,10 @@ local function getAchievementInfo (rareData)
         criteriaIndex <= GetAchievementNumCriteria(achievementId)) then
       local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
       local criteria = criteriaInfo[1];
+      local fulfilled = criteriaInfo[3];
 
-      fulfilled = criteriaInfo[3];
-
-      if (fulfilled or completed) then
+      if (fulfilled) then
+        completed = true;
         criteria = setTextColor(criteria, COLOR_MAP.green);
       else
         criteria = setTextColor(criteria, COLOR_MAP.red);
@@ -115,18 +111,23 @@ local function getAchievementInfo (rareData)
       text = text .. ' - ' .. criteria;
     end
 
-    info.completed = (completed or fulfilled);
-    info.text = text;
-
-    if (not info.completed) then
-      totalInfo.completed = false;
+    if (not completed) then
+      totalCompleted = false;
     end
 
-    totalInfo.icon = totalInfo.icon or info.icon;
-    list[x] = info;
+    totalIcon = totalIcon or icon;
+    list[x] = {
+      completed = completed,
+      text = text,
+      icon = icon,
+    };
   end
 
-  return totalInfo;
+  return {
+    completed = totalCompleted,
+    icon = totalIcon,
+    list = list,
+  };
 end
 
 local function getToyInfo (rareData)
