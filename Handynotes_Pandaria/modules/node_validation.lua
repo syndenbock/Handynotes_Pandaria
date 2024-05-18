@@ -113,9 +113,9 @@ local function getAchievementInfo (rareData)
 
     if (not completed) then
       totalCompleted = false;
+      totalIcon = totalIcon or icon;
     end
 
-    totalIcon = totalIcon or icon;
     list[x] = {
       completed = completed,
       text = text,
