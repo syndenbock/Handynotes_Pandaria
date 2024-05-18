@@ -136,43 +136,47 @@ local function getToyInfo (rareData)
   if (toyList == nil) then return nil end
 
   local list = {};
-  local totalData = {
-    collected = true,
-    list = list,
-  };
+  local totalCollected = true;
+  local totalIcon;
 
   for x = 1, #toyList, 1 do
     local toy = toyList[x];
-    local toyInfo = {GetItemInfo(toy)};
-    local toyName = toyInfo[1];
-    local info = {
-      collected = PlayerHasToy(toy),
-    };
+    local collected = PlayerHasToy(toy);
+    local toyName;
+    local icon;
 
     -- data is not cached yet
     if (IsItemDataCachedByID(toy)) then
-      info.icon = toyInfo[10] or ICON_MAP.skullGreen;
+      local toyInfo = {GetItemInfo(toy)};
+
+      toyName = toyInfo[1];
+      icon = toyInfo[10] or ICON_MAP.skullGreen;
     else
       toyName = 'waiting for data...';
-      queryItem(toy, info);
-      info.icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
+      icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
+      queryItem(toy, collected);
     end
 
-    info.name = toyName;
-
-    if (info.collected) then
+    if (collected) then
       toyName = setTextColor(toyName, COLOR_MAP.green);
     else
       toyName = setTextColor(toyName, COLOR_MAP.red);
-      totalData.collected = false;
-      totalData.icon = totalData.icon or info.icon;
+      totalCollected = false;
+      totalIcon = totalIcon or icon;
     end
 
-    info.text = toyName;
-    list[x] = info;
+    list [x] = {
+      text = toyName,
+      name = toyName,
+      collected = collected,
+    };
   end
 
-  return totalData;
+  return {
+    collected = totalCollected,
+    icon = totalIcon,
+    list = list,
+  };
 end
 
 local function getMountInfo (rareData)
