@@ -52,20 +52,14 @@ local function setTextColor (text, color)
   return color .. text .. '|r';
 end
 
-local function queryItem (itemId, info)
+local function queryItem (itemId)
   local item = Item:CreateFromItemID(itemId);
 
-  if (item:IsItemEmpty()) then return end
-
-  item:ContinueOnItemLoad(function ()
-    local data = {GetItemInfo(itemId)};
-
-    info = info or {};
-    info.name = data[1];
-    info.icon = data[10];
-
-    addon.yell('DATA_READY', info, itemId);
-  end);
+  if (not item:IsItemEmpty()) then
+    item:ContinueOnItemLoad(function ()
+      addon.yell('DATA_READY', item);
+    end);
+  end
 end
 
 local function getAchievementInfo (rareData)
@@ -144,6 +138,7 @@ local function getToyInfo (rareData)
     local collected = PlayerHasToy(toy);
     local toyName;
     local icon;
+    local queried;
 
     -- data is not cached yet
     if (IsItemDataCachedByID(toy)) then
@@ -154,7 +149,8 @@ local function getToyInfo (rareData)
     else
       toyName = 'waiting for data...';
       icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
-      queryItem(toy, collected);
+      queried = toy;
+      queryItem(toy);
     end
 
     if (collected) then
@@ -165,10 +161,11 @@ local function getToyInfo (rareData)
       totalIcon = totalIcon or icon;
     end
 
-    list [x] = {
+    list[x] = {
       text = toyName,
       name = toyName,
       collected = collected,
+      queried = queried,
     };
   end
 
@@ -245,11 +242,8 @@ local function getRareInfo (nodeData)
     achievementInfo = getAchievementInfo(rare),
     toyInfo = getToyInfo(rare),
     mountInfo = getMountInfo(rare),
+    questCompleted = rare.quest and IsQuestFlaggedCompleted(rare.quest);
   };
-
-  if (rare.quest ~= nil) then
-    info.questCompleted = IsQuestFlaggedCompleted(rare.quest);
-  end
 
   rareCache[rareId] = info;
   return info;

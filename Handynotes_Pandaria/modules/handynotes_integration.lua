@@ -121,9 +121,33 @@ function handler:OnLeave(uiMapId, coords)
   tooltip:Hide();
 end
 
-addon.listen('DATA_READY', function (info, id)
-  if (currentInfo == info) then
-    displayTooltip(currentInfo);
+local function getNestedValue (object, ...)
+  for x = 1, select('#', ...), 1 do
+    if (object == nil) then
+      return nil;
+    end
+    object = object[select(x, ...)];
+  end
+
+  return object;
+end
+
+addon.listen('DATA_READY', function (item)
+  local toyList = getNestedValue(currentInfo, 'rareInfo', 'toyInfo', 'list');
+
+  if (toyList ~= nil) then
+    local itemId = item:GetItemID();
+
+    for _, toy in ipairs(toyList) do
+      if (toy.queried == itemId) then
+        toy.name = item:GetItemName();
+        toy.text = toy.name;
+        toy.icon = item:GetItemIcon() or toy.icon;
+        toy.queried = nil;
+        displayTooltip(currentInfo);
+        return;
+      end
+    end
   end
 end);
 
