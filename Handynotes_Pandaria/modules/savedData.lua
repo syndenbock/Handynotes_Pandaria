@@ -4,8 +4,10 @@ local SETTINGS_NAME = 'HandyNotes_Pandaria_savedData';
 
 shared.saved = {};
 
-local function findGlobalObject (names)
-  for _, name in ipairs(names) do
+local function findGlobalObject (...)
+  for x = 1, select('#', ...), 1 do
+    local name = select(x, ...);
+
     if (type(_G[name]) == 'table') then
       return _G[name];
     end
@@ -39,10 +41,10 @@ local function handleAddonLoad (event, loadedAddon)
   if (loadedAddon ~= addonName) then return end
 
   local saved = shared.saved;
-  local readData = findGlobalObject({
+  local readData = findGlobalObject(
     SETTINGS_NAME,
-    'storedData',
-  }) or {};
+    'storedData'
+  ) or {};
 
   if (type(readData.hiddenNodes) == 'table') then
     saved.hiddenNodes = readData.hiddenNodes;
