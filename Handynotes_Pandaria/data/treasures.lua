@@ -1,6 +1,6 @@
-local addonName, shared = ...;
+local _, addon = ...;
 
-shared.treasureData = {
+addon.treasureData = {
   [31428] = {
     ["name"] = "The Hammer Folly",
     ["description"] = "Grey item worth 100g.",
@@ -15,7 +15,7 @@ shared.treasureData = {
   },
   [31864] = {
     ["name"] = "Chest of Supplies",
-    ["description"] = "Chest with 10g",
+    ["description"] = "Chest with 10g.",
   },
   [31415] = {
     ["name"] = "Stolen Sprite Treasure",
@@ -83,7 +83,7 @@ shared.treasureData = {
   },
   [31866] = {
     ["name"] = "Stash of Gems",
-    ["description"] = "Chest with 96g and gems",
+    ["description"] = "Chest with 96g and gems. In a cave at the bottom.",
   },
   [31426] = {
     ["name"] = "Amber Encased Moth",
@@ -91,7 +91,7 @@ shared.treasureData = {
   },
   [31865] = {
     ["name"] = "Offering of Remembrance",
-    ["description"] = "Item with 30g and buff",
+    ["description"] = "Item with 30g and buff.",
   },
   [31427] = {
     ["name"] = "Abandoned Crate of Goods",
@@ -102,4 +102,3 @@ shared.treasureData = {
     ["description"] = "Chest with 96g",
   },
 }
-

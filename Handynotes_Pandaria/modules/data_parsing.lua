@@ -1,16 +1,14 @@
-local addonName, shared = ...;
+local _, addon = ...;
 
 local GetAchievementNumCriteria = _G.GetAchievementNumCriteria;
 local GetAchievementCriteriaInfo = _G.GetAchievementCriteriaInfo;
 
-local addon = shared.addon;
-
 local function parseData ()
-  local rareInfo = shared.rareData;
-  local treasureInfo = shared.treasureData;
+  local rareInfo = addon.rareData;
+  local treasureInfo = addon.treasureData;
 
   local function parseMountData ()
-    local mountData = shared.mountData;
+    local mountData = addon.mountData;
 
     if (mountData == nil) then return end
 
@@ -33,11 +31,11 @@ local function parseData ()
       end
     end
 
-    shared.mountData = nil;
+    addon.mountData = nil;
   end
 
   local function parseToyData ()
-    local toyData = shared.toyData;
+    local toyData = addon.toyData;
 
     if (toyData == nil) then return end
 
@@ -60,11 +58,11 @@ local function parseData ()
       end
     end
 
-    shared.toyData = nil;
+    addon.toyData = nil;
   end
 
   local function parseAchievementdata ()
-    local achievementData = shared.achievementData;
+    local achievementData = addon.achievementData;
 
     if (achievementData == nil) then return end
 
@@ -143,7 +141,7 @@ local function parseData ()
             end
 
             addRareAchievementInfo(rareData.id, achievement,
-                rareData.index or -1, rareData.description);
+                rareData.index or x, rareData.description);
           end
         end
       end
@@ -191,8 +189,8 @@ local function parseData ()
   parseToyData();
   parseAchievementdata();
 
-  shared.achievementData = nil;
-  shared.mountData = nil;
+  addon.achievementData = nil;
+  addon.mountData = nil;
 end
 
 addon.on('PLAYER_LOGIN', parseData);

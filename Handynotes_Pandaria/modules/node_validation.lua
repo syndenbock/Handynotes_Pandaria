@@ -1,4 +1,4 @@
-local _, shared = ...;
+local _, addon = ...;
 
 local GetAchievementCriteriaInfo = _G.GetAchievementCriteriaInfo;
 local GetAchievementInfo = _G.GetAchievementInfo;
@@ -12,11 +12,10 @@ local Item = _G.Item;
 local PlayerHasToy = _G.PlayerHasToy;
 local wipe = _G.wipe;
 
-local addon = shared.addon;
-local rareData = shared.rareData;
-local treasureInfo = shared.treasureData;
-local nodes = shared.nodeData;
-local saved = shared.saved;
+local rareData = addon.rareData;
+local treasureInfo = addon.treasureData;
+local nodes = addon.nodeData;
+local saved = addon.saved;
 local playerFaction;
 local dataCache = {
   rares = {},
@@ -52,20 +51,14 @@ local function setTextColor (text, color)
   return color .. text .. '|r';
 end
 
-local function queryItem (itemId, info)
+local function queryItem (itemId)
   local item = Item:CreateFromItemID(itemId);
 
-  if (item:IsItemEmpty()) then return end
-
-  item:ContinueOnItemLoad(function ()
-    local data = {GetItemInfo(itemId)};
-
-    info = info or {};
-    info.name = data[1];
-    info.icon = data[10];
-
-    addon.yell('DATA_READY', info, itemId);
-  end);
+  if (not item:IsItemEmpty()) then
+    item:ContinueOnItemLoad(function ()
+      addon.yell('DATA_READY', item);
+    end);
+  end
 end
 
 local function getAchievementInfo (rareData)
@@ -74,10 +67,8 @@ local function getAchievementInfo (rareData)
   if (achievementList == nil) then return nil end
 
   local list = {};
-  local totalInfo = {
-    list = list,
-    completed = true,
-  };
+  local totalCompleted = true;
+  local totalIcon;
 
   for x = 1, #achievementList, 1 do
     local achievementData = achievementList[x];
@@ -85,11 +76,9 @@ local function getAchievementInfo (rareData)
     local achievementInfo = {GetAchievementInfo(achievementId)};
     local text = achievementInfo[2];
     local completed = achievementInfo[4];
+    -- local completedOnThisCharacter = achievementInfo[13];
     local criteriaIndex = achievementData.index;
-    local fulfilled = false;
-    local info = {
-      icon = achievementInfo[10],
-    };
+    local icon = achievementInfo[10];
 
     if (completed) then
       text = setTextColor(text, COLOR_MAP.green);
@@ -103,10 +92,10 @@ local function getAchievementInfo (rareData)
         criteriaIndex <= GetAchievementNumCriteria(achievementId)) then
       local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
       local criteria = criteriaInfo[1];
+      local fulfilled = criteriaInfo[3];
 
-      fulfilled = criteriaInfo[3];
-
-      if (fulfilled or completed) then
+      if (fulfilled) then
+        completed = true;
         criteria = setTextColor(criteria, COLOR_MAP.green);
       else
         criteria = setTextColor(criteria, COLOR_MAP.red);
@@ -115,18 +104,23 @@ local function getAchievementInfo (rareData)
       text = text .. ' - ' .. criteria;
     end
 
-    info.completed = (completed or fulfilled);
-    info.text = text;
-
-    if (not info.completed) then
-      totalInfo.completed = false;
+    if (not completed) then
+      totalCompleted = false;
+      totalIcon = totalIcon or icon;
     end
 
-    totalInfo.icon = totalInfo.icon or info.icon;
-    list[x] = info;
+    list[x] = {
+      completed = completed,
+      text = text,
+      icon = icon,
+    };
   end
 
-  return totalInfo;
+  return {
+    completed = totalCompleted,
+    icon = totalIcon,
+    list = list,
+  };
 end
 
 local function getToyInfo (rareData)
@@ -135,43 +129,50 @@ local function getToyInfo (rareData)
   if (toyList == nil) then return nil end
 
   local list = {};
-  local totalData = {
-    collected = true,
-    list = list,
-  };
+  local totalCollected = true;
+  local totalIcon;
 
   for x = 1, #toyList, 1 do
     local toy = toyList[x];
-    local toyInfo = {GetItemInfo(toy)};
-    local toyName = toyInfo[1];
-    local info = {
-      collected = PlayerHasToy(toy),
-    };
+    local collected = PlayerHasToy(toy);
+    local toyName;
+    local icon;
+    local queried;
 
     -- data is not cached yet
     if (IsItemDataCachedByID(toy)) then
-      info.icon = toyInfo[10] or ICON_MAP.skullGreen;
+      local toyInfo = {GetItemInfo(toy)};
+
+      toyName = toyInfo[1];
+      icon = toyInfo[10] or ICON_MAP.skullGreen;
     else
       toyName = 'waiting for data...';
-      queryItem(toy, info);
-      info.icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
+      icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
+      queried = toy;
+      queryItem(toy);
     end
 
-    info.name = toyName;
-
-    if (info.collected) then
+    if (collected) then
       toyName = setTextColor(toyName, COLOR_MAP.green);
     else
       toyName = setTextColor(toyName, COLOR_MAP.red);
-      totalData.collected = false;
-      totalData.icon = totalData.icon or info.icon;
+      totalCollected = false;
+      totalIcon = totalIcon or icon;
     end
 
-    info.text = toyName;
-    list[x] = info;
+    list[x] = {
+      text = toyName,
+      name = toyName,
+      collected = collected,
+      queried = queried,
+    };
   end
 
-  return totalData;
+  return {
+    collected = totalCollected,
+    icon = totalIcon,
+    list = list,
+  };
 end
 
 local function getMountInfo (rareData)
@@ -180,33 +181,36 @@ local function getMountInfo (rareData)
   if (mountList == nil) then return nil end
 
   local list = {};
-  local totalData = {
-    list = list,
-    collected = true,
-  };
+  local totalCollected = true;
+  local totalIcon;
 
   for x = 1, #mountList, 1 do
     local mountId = mountList[x];
     local mountInfo = {GetMountInfoByID(mountId)};
     local mountName = mountInfo[1];
-    local info = {
-      icon = mountInfo[3] or ICON_MAP.skullOrange,
-      collected = mountInfo[11],
-    };
+    local icon = mountInfo[3] or ICON_MAP.skullOrange;
+    local collected = mountInfo[11];
 
-    if (info.collected) then
+    if (collected) then
       mountName = setTextColor(mountName, COLOR_MAP.green);
     else
       mountName = setTextColor(mountName, COLOR_MAP.red);
-      totalData.collected = false;
-      totalData.icon = totalData.icon or info.icon;
+      totalCollected = false;
+      totalIcon = totalIcon or icon;
     end
 
-    info.text = mountName;
-    list[x] = info;
+    list[x] = {
+      collected = collected,
+      icon = icon,
+      text = mountName,
+    };
   end
 
-  return totalData;
+  return {
+    collected = totalCollected,
+    icon = totalIcon,
+    list = list,
+  };
 end
 
 local function getRareInfo (nodeData)
@@ -237,11 +241,8 @@ local function getRareInfo (nodeData)
     achievementInfo = getAchievementInfo(rare),
     toyInfo = getToyInfo(rare),
     mountInfo = getMountInfo(rare),
+    questCompleted = rare.quest and IsQuestFlaggedCompleted(rare.quest);
   };
-
-  if (rare.quest ~= nil) then
-    info.questCompleted = IsQuestFlaggedCompleted(rare.quest);
-  end
 
   rareCache[rareId] = info;
   return info;
@@ -357,10 +358,8 @@ local function getNodeInfo (zone, coords)
     return nodeCache[zone][coords];
   end
 
-  local nodeData = nodes[zone];
+  local nodeData = nodes[zone] and nodes[zone][coords];
 
-  if (nodeData == nil) then return nil end
-  nodeData = nodeData[coords];
   if (nodeData == nil) then return nil end
 
   local info = {
