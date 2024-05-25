@@ -156,7 +156,7 @@ local nodeData = {
     },
     treasures = {
       [68600760] = 31408,
-      [54207230] = 31863,
+      [52167342] = 31863,
     },
   },
   [MAP_IDS.valeofblossoms] = {
