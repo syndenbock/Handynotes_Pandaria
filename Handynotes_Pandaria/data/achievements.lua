@@ -105,3 +105,23 @@ else
     },
   };
 end
+
+if (addon.isPandariaTimerunning()) then
+  local achievementData = addon.achievementData.rares.auto;
+  local timeRunningAchievements = {
+    19993, -- Elusive Foes: The Jade Forest
+    19994, -- Elusive Foes: Valley of the Four Winds
+    19995, -- Elusive Foes: Krasarang Wilds
+    19996, -- Elusive Foes: Kun-Lai Summit
+    19997, -- Elusive Foes: Townlong Steppes
+    19998, -- Elusive Foes: Dread Wastes
+    19999, -- Elusive Foes: Landfall
+    20000, -- Elusive Foes: Isle of Thunder
+    20001, -- Elusive Foes: Timeless Isle
+    20069, -- Elusive Foes: Vale of Eternal Blossoms
+  };
+
+  for _, achievement in ipairs(timeRunningAchievements) do
+    _G.tinsert(achievementData, achievement);
+  end
+end

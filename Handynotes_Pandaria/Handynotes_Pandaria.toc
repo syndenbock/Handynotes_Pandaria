@@ -12,6 +12,7 @@
 HandyNotes_Pandaria.lua
 
 # core files
+core\Utils.lua
 core\Events.lua
 core\EventFunnel.lua
 core\Yell.lua
