@@ -1,5 +1,7 @@
 local _, addon = ...;
 
+local tinsert = _G.tinsert;
+
 local GetAchievementNumCriteria = _G.GetAchievementNumCriteria;
 local GetAchievementCriteriaInfo = _G.GetAchievementCriteriaInfo;
 
@@ -26,7 +28,7 @@ local function parseData ()
         elseif (rareData.mounts == nil) then
           rareData.mounts = {mountId};
         else
-          table.insert(rareData.mounts, mountId);
+          tinsert(rareData.mounts, mountId);
         end
       end
     end
@@ -53,7 +55,7 @@ local function parseData ()
         elseif (rareData.toys == nil) then
           rareData.toys = {toyId};
         else
-          table.insert(rareData.toys, toyId);
+          tinsert(rareData.toys, toyId);
         end
       end
     end
@@ -73,7 +75,7 @@ local function parseData ()
       data = infoTable[id];
 
       data.achievements = data.achievements or {};
-      table.insert(data.achievements, {
+      tinsert(data.achievements, {
         id = achievementId,
         index = criteriaIndex,
       });
@@ -193,4 +195,12 @@ local function parseData ()
   addon.mountData = nil;
 end
 
-addon.on('PLAYER_LOGIN', parseData);
+--[[ Some character and anchievement data is only available after PLAYER_LOGIN
+     and event callbacks are not called in order. Therefore waiting for one
+     frame after PLAYER_LOGIN is required. ]]
+addon.onOnce('PLAYER_LOGIN', function ()
+  _G.C_Timer.After(0, function ()
+    parseData();
+    addon.integrateWithHandyNotes();
+  end);
+end);

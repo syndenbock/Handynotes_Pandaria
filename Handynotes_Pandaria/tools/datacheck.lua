@@ -1,20 +1,17 @@
 local _, addon = ...;
 
-local rareInfo = addon.rareData;
-local nodes = addon.nodeData;
-
---if true then return end
+local infoProvider = addon.import('infoProvider');
 
 local function nameCheck ()
+  local nodes = addon.nodeData;
+
   for zone, zoneNodes in pairs(nodes) do
     for coords, node in pairs(zoneNodes) do
-      local info = addon.getNodeInfo(node);
+      local info = infoProvider.getNodeInfo(zone, coords);
 
       if (info == nil) then
         print(node.treasure, '-', node.rare);
-      end
-
-      if (info and info.name == nil) then
+      elseif (info.name == nil) then
         if (node.treasure ~= nil) then
           print('no name for treasure:', node.treasure);
         end

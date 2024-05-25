@@ -367,11 +367,8 @@ local function registerWithHandyNotes ()
   HandyNotes:RegisterPluginDB(addonName, handler, options);
 end
 
-local function handleLogin ()
+function addon.integrateWithHandyNotes ()
   registerWithHandyNotes();
   addon.funnel({'CRITERIA_UPDATE'}, updateNodes);
   addon.on({'NEW_TOY_ADDED', 'NEW_MOUNT_ADDED'}, updateNodes);
-  addon.off('PLAYER_LOGIN', handleLogin);
 end
-
-addon.on('PLAYER_LOGIN', handleLogin);
