@@ -1,1 +1,2 @@
-- Updated interface version for 10.2.7
+- Handle Elusive: <Zone> achievements in Timerunning
+- Performance and data structure improvements

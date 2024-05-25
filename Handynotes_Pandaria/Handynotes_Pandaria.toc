@@ -1,7 +1,7 @@
 ## Interface: 100207
 ## Title: Handynotes Pandaria
 ## X-Curse-Project-ID: 352950
-## Version: 1.5.14
+## Version: 1.6
 ## Notes: Shows locations of treasures and rares in Pandaria
 ## Author: syndenbock
 ## RequiredDeps: HandyNotes
