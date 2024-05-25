@@ -1,4 +1,4 @@
-local _, shared = ...;
+local _, addon = ...;
 
 local MAP_IDS = {
   jadeforest = 371,
@@ -313,7 +313,7 @@ local nodeData = {
   },
 }
 
-shared.nodeData = (function ()
+addon.nodeData = (function ()
   local TYPE_RARE = 'rare';
   local TYPE_TREASURE = 'treasure';
   local data = {};

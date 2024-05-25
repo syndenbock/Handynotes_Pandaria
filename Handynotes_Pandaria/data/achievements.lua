@@ -1,6 +1,6 @@
-local _, shared = ...;
+local _, addon = ...;
 
-shared.achievementData = {
+addon.achievementData = {
   rares = {
     auto = {
       7439, -- Glorious!
@@ -85,7 +85,7 @@ shared.achievementData = {
 
 -- "I'm in your base, killing your dudes" has faction specific NPCs
 if (_G.UnitFactionGroup('player') == 'Alliance') then
-  shared.achievementData.rares.static[7932] = {
+  addon.achievementData.rares.static[7932] = {
     {
       id = 68321,
     }, {
@@ -95,7 +95,7 @@ if (_G.UnitFactionGroup('player') == 'Alliance') then
     },
   };
 else
-  shared.achievementData.rares.static[7932] = {
+  addon.achievementData.rares.static[7932] = {
     {
       id = 68318,
     }, {

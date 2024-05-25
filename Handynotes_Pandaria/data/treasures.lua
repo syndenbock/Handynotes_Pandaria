@@ -1,6 +1,6 @@
-local addonName, shared = ...;
+local _, addon = ...;
 
-shared.treasureData = {
+addon.treasureData = {
   [31428] = {
     ["name"] = "The Hammer Folly",
     ["description"] = "Grey item worth 100g.",

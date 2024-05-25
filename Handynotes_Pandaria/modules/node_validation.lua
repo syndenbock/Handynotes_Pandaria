@@ -1,4 +1,4 @@
-local _, shared = ...;
+local _, addon = ...;
 
 local GetAchievementCriteriaInfo = _G.GetAchievementCriteriaInfo;
 local GetAchievementInfo = _G.GetAchievementInfo;
@@ -12,11 +12,10 @@ local Item = _G.Item;
 local PlayerHasToy = _G.PlayerHasToy;
 local wipe = _G.wipe;
 
-local addon = shared.addon;
-local rareData = shared.rareData;
-local treasureInfo = shared.treasureData;
-local nodes = shared.nodeData;
-local saved = shared.saved;
+local rareData = addon.rareData;
+local treasureInfo = addon.treasureData;
+local nodes = addon.nodeData;
+local saved = addon.saved;
 local playerFaction;
 local dataCache = {
   rares = {},

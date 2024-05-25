@@ -1,6 +1,4 @@
-local addonName, shared = ...;
-
-local addon = shared.addon;
+local _, addon = ...;
 
 addon.on('PLAYER_LOGIN', function ()
   convertedData = nil;

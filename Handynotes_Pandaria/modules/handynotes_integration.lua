@@ -1,4 +1,4 @@
-local addonName, shared = ...;
+local addonName, addon = ...;
 
 local CloseDropDownMenus = _G.CloseDropDownMenus;
 local GameTooltip = _G.GameTooltip;
@@ -10,10 +10,9 @@ local UIParent = _G.UIParent;
 local WorldMapButton = _G.WorldMapButton;
 local WorldMapTooltip = _G.WorldMapTooltip;
 
-local addon = shared.addon;
-local HandyNotes = shared.HandyNotes;
-local nodes = shared.nodeData;
-local saved = shared.saved;
+local HandyNotes = addon.HandyNotes;
+local nodes = addon.nodeData;
+local saved = addon.saved;
 local handler = {};
 local tooltip;
 local currentInfo;

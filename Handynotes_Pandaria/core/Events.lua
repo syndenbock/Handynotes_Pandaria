@@ -1,4 +1,4 @@
-local addonName, shared = ...;
+local addonName, addon = ...;
 
 local eventFrame = _G.CreateFrame('frame');
 local callbacks = {};
@@ -43,10 +43,10 @@ end
 -- public methods
 --##############################################################################
 
-function shared.addon.on (events, callback)
+function addon.on (events, callback)
   callForEvents(events, callback, addCallback);
 end
 
-function shared.addon.off (events, callback)
+function addon.off (events, callback)
   callForEvents(events, callback, removeCallback);
 end
