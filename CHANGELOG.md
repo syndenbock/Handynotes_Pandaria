@@ -1,2 +1,1 @@
-- Handle Elusive: <Zone> achievements in Timerunning
-- Performance and data structure improvements
+- Remove debug print
