@@ -109,7 +109,6 @@ end
 --[[ Timerunning check returns nil if it's called before PLAYER_LOGIN, so the
      check needs to be deferred. ]]
 addon.onOnce('PLAYER_LOGIN', function ()
-  print(1);
   if (addon.isPandariaTimerunning()) then
     local achievementData = addon.achievementData.rares.auto;
     local timeRunningAchievements = {
