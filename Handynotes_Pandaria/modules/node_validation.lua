@@ -272,28 +272,24 @@ local function readRareInfo (rareId)
     return rareCache[rareId];
   end
 
-  local rare = rareData[rareId];
+  local rareInfo = rareData[rareId];
 
-  if (rare == nil) then
+  if (rareInfo == nil) then
     return nil;
   end
 
-  if (rare.faction and rare.faction ~= playerFaction) then
+  if (rareInfo.faction and rareInfo.faction ~= playerFaction) then
     return nil;
   end
 
-  local info = {
-    name = rare.name,
-    description = rare.description,
-    special = rare.special,
-    achievementInfo = getAchievementInfo(rare),
-    toyInfo = getToyInfo(rare),
-    mountInfo = getMountInfo(rare),
-    questCompleted = rare.quest and IsQuestFlaggedCompleted(rare.quest);
-  };
+  rareInfo.achievementInfo = getAchievementInfo(rareInfo);
+  rareInfo.toyInfo = getToyInfo(rareInfo);
+  rareInfo.mountInfo = getMountInfo(rareInfo);
+  rareInfo.mountInfo = getMountInfo(rareInfo);
+  rareInfo.questCompleted = rareInfo.quest and IsQuestFlaggedCompleted(rareInfo.quest);
 
-  rareCache[rareId] = info;
-  return info;
+  rareCache[rareId] = rareInfo;
+  return rareInfo;
 end
 
 local function getRareInfo (rareId)
@@ -331,18 +327,21 @@ local function readTreasureInfo (treasureId)
     return nil;
   end
 
+  local treasureCache = dataCache.treasures;
+
+  if (treasureCache[treasureId] ~= nil) then
+    return treasureCache[treasureId];
+  end
+
   if (treasureData.faction and treasureData.faction ~= playerFaction) then
     return nil;
   end
 
-  local info = {
-    name = treasureData.name,
-    description = treasureData.description,
-    achievementInfo = getAchievementInfo(treasureData),
-    collected = IsQuestFlaggedCompleted(treasureId),
-  };
+  treasureData.achievementInfo = getAchievementInfo(treasureData);
+  treasureData.collected = IsQuestFlaggedCompleted(treasureId);
+  treasureCache[treasureId] = treasureData;
 
-  return info;
+  return treasureData;
 end
 
 local function getTreasureInfo (treasureId)
