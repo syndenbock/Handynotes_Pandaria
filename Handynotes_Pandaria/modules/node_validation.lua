@@ -227,12 +227,10 @@ local function interpreteRareInfo (nodeInfo)
 
   local mountInfo = nodeInfo.mountInfo;
 
-  if (settings.show_mounts == true and mountInfo ~= nil) then
-    if (mountInfo.collected == false) then
-      nodeInfo.icon = mountInfo.icon or ICON_MAP.skullPurple;
-      nodeInfo.display = true;
-      return;
-    end
+  if (settings.show_mounts == true and mountInfo ~= nil and mountInfo.collected == false) then
+    nodeInfo.icon = mountInfo.icon or ICON_MAP.skullPurple;
+    nodeInfo.display = true;
+    return;
   end
 
   local toyInfo = nodeInfo.toyInfo;
@@ -259,8 +257,8 @@ local function interpreteRareInfo (nodeInfo)
   end
 
   if (settings.always_show_rares == true) then
-    nodeInfo.display = true;
     nodeInfo.icon = ICON_MAP.skullGray;
+    nodeInfo.display = true;
     return;
   end
 end

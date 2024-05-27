@@ -26,7 +26,7 @@ local function iterateZoneNodes (zone, nodes)
 
     if (nodeList ~= nil) then
       for _, node in ipairs(nodeList) do
-        if (node.display) then
+        if (node.display == true) then
           coroutine.yield(coords, zone, node.icon, saved.settings.icon_scale, saved.settings.icon_alpha);
         end
       end
