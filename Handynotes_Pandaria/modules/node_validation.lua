@@ -398,10 +398,6 @@ local function getNodeInfo (zone, coords)
     return nil;
   end
 
-  for _, node in ipairs(nodes) do
-    interpreteTreasureInfo(node);
-  end
-
   nodeCache[zone] = nodeCache[zone] or {};
   nodeCache[zone][coords] = nodes;
 
