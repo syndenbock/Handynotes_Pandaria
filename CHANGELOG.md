@@ -1,1 +1,3 @@
-- Remove debug print
+- Added treasures for the "Legend of the Past" achievement
+- Updated descriptions of some treasures to help finding them
+- Internal logic improvements
