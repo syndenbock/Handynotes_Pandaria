@@ -330,7 +330,7 @@ addon.nodeData = (function ()
     mapData[coords][type] = id;
   end
 
-  for mapId, nodes in pairs (nodeData) do
+  for mapId, nodes in pairs(nodeData) do
     data[mapId] = {};
 
     if (nodes.rares) then
@@ -345,6 +345,8 @@ addon.nodeData = (function ()
       end
     end
   end
+
+  nodeData = nil;
 
   return data;
 end)();
