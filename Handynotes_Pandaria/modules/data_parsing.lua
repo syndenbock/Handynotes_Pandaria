@@ -80,7 +80,7 @@ local function parseData ()
         index = criteriaIndex,
       });
 
-      if (description ~= nil and data.description == nil) then
+      if (data.description == nil and description ~= nil) then
         data.description = description;
       end
 
@@ -161,6 +161,29 @@ local function parseData ()
         addAchievementInfo(treasureInfo, treasureId, achievementId, criteriaIndex, description);
       end
 
+      local function parseDynamicData ()
+        local achievementList = treasureAchievementData.auto;
+
+        if (achievementList == nil) then return end
+
+        for x = 1, #achievementList, 1 do
+          local achievementId = achievementList[x];
+          local numCriteria  = GetAchievementNumCriteria(achievementId);
+
+          for y = 1, numCriteria, 1 do
+            local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, y)};
+            local treasureId = criteriaInfo[8];
+
+            -- -- this is for detecting unhandled rares
+            -- if (rareId == nil or rareId == 0) then
+            --   print(y, criteriaInfo[1], '-', rareId);
+            -- end
+
+            addTreasureAchievementInfo(treasureId, achievementId, y);
+          end
+        end
+      end
+
       local function parseStaticData ()
         local staticData = treasureAchievementData.static;
 
@@ -180,6 +203,7 @@ local function parseData ()
         end
       end
 
+      parseDynamicData();
       parseStaticData();
     end
 
