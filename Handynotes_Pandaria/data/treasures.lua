@@ -101,4 +101,20 @@ addon.treasureData = {
     ["name"] = "Ship's Locker",
     ["description"] = "Chest with 96g",
   },
+  [222796] = {
+    ["name"] = "Cloudstrike Family Helm",
+    ["description"] = "One of the four artifacts. Can spawn in a lot of places on the isle.",
+  },
+  [223539] = {
+    ["name"] = "Snowdrift Tiger Talons",
+    ["description"] = "One of the four artifacts. Can spawn in a lot of places on the isle.",
+  },
+  [223537] = {
+    ["name"] = "Flameheart Shawl",
+    ["description"] = "One of the four artifacts. Can spawn in a lot of places on the isle.",
+  },
+  [223538] = {
+    ["name"] = "Riverspeaker's Trident",
+    ["description"] = "One of the four artifacts. Can spawn in a lot of places on the isle.",
+  },
 }

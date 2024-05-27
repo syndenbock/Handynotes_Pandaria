@@ -58,6 +58,9 @@ addon.achievementData = {
     },
   },
   treasures = {
+    auto = {
+      8723, -- Legend of the Past
+    },
     static = {
       [7997] = { -- Riches of Pandaria
         31400,
