@@ -1,5 +1,7 @@
 local _, addon = ...;
 
+local tinsert = _G.tinsert;
+
 local GetAchievementCriteriaInfo = _G.GetAchievementCriteriaInfo;
 local GetAchievementInfo = _G.GetAchievementInfo;
 local GetAchievementNumCriteria = _G.GetAchievementNumCriteria;
@@ -213,9 +215,57 @@ local function getMountInfo (rareData)
   };
 end
 
-local function getRareInfo (nodeData)
-  local rareId = nodeData.rare;
+local function interpreteRareInfo (nodeInfo)
+  local settings = saved.settings;
 
+  nodeInfo.icon = nodeInfo.icon or ICON_MAP.question;
+  nodeInfo.display = false;
+
+  if (settings.show_rares == false or nodeInfo.questCompleted == true) then
+    return;
+  end
+
+  local mountInfo = nodeInfo.mountInfo;
+
+  if (settings.show_mounts == true and mountInfo ~= nil) then
+    if (mountInfo.collected == false) then
+      nodeInfo.icon = mountInfo.icon or ICON_MAP.skullPurple;
+      nodeInfo.display = true;
+      return;
+    end
+  end
+
+  local toyInfo = nodeInfo.toyInfo;
+
+  if (settings.show_toys == true and toyInfo ~= nil and toyInfo.collected == false) then
+    nodeInfo.icon = toyInfo.icon or ICON_MAP.skullGreen;
+    nodeInfo.display = true;
+    return;
+  end
+
+  local achievementInfo = nodeInfo.achievementInfo;
+
+  if (settings.show_achievements == true and achievementInfo ~= nil and achievementInfo.completed == false) then
+    -- nodeInfo.icon = achievementInfo.icon;
+    nodeInfo.icon = ICON_MAP.skullYellow;
+    nodeInfo.display = true;
+    return;
+  end
+
+  if (settings.show_special_rares == true and nodeInfo.special == true) then
+    nodeInfo.icon = ICON_MAP.skullBlue;
+    nodeInfo.display = true;
+    return;
+  end
+
+  if (settings.always_show_rares == true) then
+    nodeInfo.display = true;
+    nodeInfo.icon = ICON_MAP.skullGray;
+    return;
+  end
+end
+
+local function readRareInfo (rareId)
   if (rareId == nil) then return nil end
 
   local rareCache = dataCache.rares;
@@ -248,11 +298,34 @@ local function getRareInfo (nodeData)
   return info;
 end
 
-local function getTreasureInfo (nodeData)
-  local treasureId = nodeData.treasure;
+local function getRareInfo (rareId)
+  local info = readRareInfo(rareId);
 
-  if (treasureId == nil) then return nil end
+  if (info ~= nil) then
+    interpreteRareInfo(info);
+  end
 
+  return info;
+end
+
+local function interpreteTreasureInfo (nodeInfo)
+  local settings = saved.settings;
+
+  nodeInfo.icon = nodeInfo.icon or ICON_MAP.chest;
+  nodeInfo.display = true;
+
+  if (settings.show_treasures == false) then
+    nodeInfo.display = false;
+    return;
+  end
+
+  if (nodeInfo.collected == true) then
+    nodeInfo.display = false;
+    return;
+  end
+end
+
+local function readTreasureInfo (treasureId)
   local treasureData = treasureInfo[treasureId];
 
   if (treasureData == nil) then
@@ -269,80 +342,19 @@ local function getTreasureInfo (nodeData)
     description = treasureData.description,
     achievementInfo = getAchievementInfo(treasureData),
     collected = IsQuestFlaggedCompleted(treasureId),
-    icon = ICON_MAP.chest,
   };
 
   return info;
 end
 
-local function interpreteNodeInfo (nodeInfo)
-  local rareInfo = nodeInfo.rareInfo;
-  local settings = saved.settings;
+local function getTreasureInfo (treasureId)
+  local info = readTreasureInfo(treasureId);
 
-  if (settings.show_rares == true and rareInfo ~= nil) then
-    if (rareInfo.questCompleted == true) then
-      nodeInfo.display = false;
-      return;
-    end
-
-    local mountInfo = rareInfo.mountInfo;
-
-    if (settings.show_mounts == true and mountInfo ~= nil) then
-      if (mountInfo.collected == false) then
-        nodeInfo.icon = mountInfo.icon or ICON_MAP.skullPurple;
-        nodeInfo.display = true;
-        return;
-      end
-    end
-
-    local toyInfo = rareInfo.toyInfo;
-
-    if (settings.show_toys == true and toyInfo ~= nil) then
-      if (toyInfo.collected == false) then
-        nodeInfo.icon = toyInfo.icon or ICON_MAP.skullGreen;
-        nodeInfo.display = true;
-        return;
-      end
-    end
-
-    local achievementInfo = rareInfo.achievementInfo;
-
-    if (settings.show_achievements == true and achievementInfo ~= nil) then
-      if (achievementInfo.completed == false) then
-        -- nodeInfo.icon = achievementInfo.icon;
-        nodeInfo.icon = ICON_MAP.skullYellow;
-        nodeInfo.display = true;
-        return;
-      end
-    end
-
-    if (settings.show_special_rares == true and rareInfo.special == true) then
-      nodeInfo.icon = ICON_MAP.skullBlue;
-      nodeInfo.display = true;
-      return;
-    end
-
-    if (settings.always_show_rares == true) then
-      nodeInfo.display = true;
-      nodeInfo.icon = ICON_MAP.skullGray;
-      return;
-    end
+  if (info ~= nil) then
+    interpreteTreasureInfo(info);
   end
 
-  local treasureInfo = nodeInfo.treasureInfo;
-
-  if (settings.show_treasures == true and treasureInfo ~= nil) then
-    if (treasureInfo.collected == false) then
-      nodeInfo.icon = treasureInfo.icon;
-      nodeInfo.display = true;
-      return;
-    end
-
-    nodeInfo.icon = nodeInfo.icon or ICON_MAP.chest;
-  end
-
-  nodeInfo.icon = nodeInfo.icon or ICON_MAP.question;
-  nodeInfo.display = false;
+  return info;
 end
 
 local function getNodeInfo (zone, coords)
@@ -362,19 +374,40 @@ local function getNodeInfo (zone, coords)
 
   if (nodeData == nil) then return nil end
 
-  local info = {
-    rareInfo = getRareInfo(nodeData),
-    treasureInfo = getTreasureInfo(nodeData),
-  };
+  local nodes = {};
 
-  if (info.rareInfo == nil and info.treasureInfo == nil) then return nil end
+  if (nodeData.rare ~= nil) then
+    if (type(nodeData.rare) == 'table') then
+      for _, rareId in ipairs(nodeData.rare) do
+        tinsert(nodes, getRareInfo(rareId));
+      end
+    else
+      tinsert(nodes, getRareInfo(nodeData.rare));
+    end
+  end
 
-  interpreteNodeInfo(info);
+  if (nodeData.treasure ~= nil) then
+    if (type(nodeData.treasure) == 'table') then
+      for _, rareId in ipairs(nodeData.treasure) do
+        tinsert(nodes, getTreasureInfo(rareId));
+      end
+    else
+      tinsert(nodes, getTreasureInfo(nodeData.treasure));
+    end
+  end
+
+  if (#nodes == 0) then
+    return nil;
+  end
+
+  for _, node in ipairs(nodes) do
+    interpreteTreasureInfo(node);
+  end
 
   nodeCache[zone] = nodeCache[zone] or {};
-  nodeCache[zone][coords] = info or {};
+  nodeCache[zone][coords] = nodes;
 
-  return info;
+  return nodes;
 end
 
 local function flush ()

@@ -21,12 +21,14 @@ local infoProvider = addon.import('infoProvider');
 local nodeHider = addon.import('nodeHider');
 
 local function iterateZoneNodes (zone, nodes)
-  for coords, node in pairs(nodes) do
-    local info = infoProvider.getNodeInfo(zone, coords);
+  for coords, _ in pairs(nodes) do
+    local nodeList = infoProvider.getNodeInfo(zone, coords);
 
-    if (info ~= nil) then
-      if (info.display) then
-        coroutine.yield(coords, zone, info.icon, saved.settings.icon_scale, saved.settings.icon_alpha);
+    if (nodeList ~= nil) then
+      for _, node in ipairs(nodeList) do
+        if (node.display) then
+          coroutine.yield(coords, zone, node.icon, saved.settings.icon_scale, saved.settings.icon_alpha);
+        end
       end
     else
       nodes[coords] = nil;
@@ -80,29 +82,39 @@ local function addTooltipText (tooltip, info, header)
   end
 end
 
-local function displayTooltip (nodeInfo)
-  local nodeData = nodeInfo.rareInfo or nodeInfo.treasureInfo;
-
-  tooltip:SetText(nodeData.name or nodeInfo.rare or nodeInfo.treasure);
+local function displayNode (nodeInfo)
+  tooltip:AddLine(nodeInfo.name or nodeInfo.rare or nodeInfo.treasure);
   -- tooltip:SetText(nodeData.name .. ' ' .. (node.rare or node.treasure));
 
-  if (nodeData.description ~= nil) then
-    tooltip:AddLine(nodeData.description);
+  if (nodeInfo.description ~= nil) then
+    tooltip:AddLine(nodeInfo.description);
   end
 
-  addTooltipText(tooltip, nodeData.mountInfo, 'Mounts:');
-  addTooltipText(tooltip, nodeData.toyInfo, 'Toys:');
-  addTooltipText(tooltip, nodeData.achievementInfo, 'Achievements:');
+  addTooltipText(tooltip, nodeInfo.mountInfo, 'Mounts:');
+  addTooltipText(tooltip, nodeInfo.toyInfo, 'Toys:');
+  addTooltipText(tooltip, nodeInfo.achievementInfo, 'Achievements:');
+end
+
+local function displayTooltip (nodeList)
+  tooltip:ClearLines();
+
+  for x = 1, #nodeList, 1 do
+    displayNode(nodeList[x]);
+
+    if (x < #nodeList) then
+      tooltip:AddLine(' ');
+    end
+  end
 
   tooltip:Show();
 end
 
 function handler:OnEnter(uiMapId, coords)
-  local nodeInfo = infoProvider.getNodeInfo(uiMapId, coords);
+  local nodeList = infoProvider.getNodeInfo(uiMapId, coords);
 
-  if (nodeInfo == nil) then return end
+  if (nodeList == nil) then return end
 
-  currentInfo = nodeInfo;
+  currentInfo = nodeList;
 
   tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip;
 
@@ -112,7 +124,7 @@ function handler:OnEnter(uiMapId, coords)
     tooltip:SetOwner(self, "ANCHOR_RIGHT");
   end
 
-  displayTooltip(nodeInfo);
+  displayTooltip(nodeList);
 end
 
 function handler:OnLeave(uiMapId, coords)
@@ -131,8 +143,8 @@ local function getNestedValue (object, ...)
   return object;
 end
 
-addon.listen('DATA_READY', function (item)
-  local toyList = getNestedValue(currentInfo, 'rareInfo', 'toyInfo', 'list');
+local function checkIfNodeQueriedToy (node, item)
+  local toyList = getNestedValue(node, 'toyInfo', 'list');
 
   if (toyList ~= nil) then
     local itemId = item:GetItemID();
@@ -146,6 +158,14 @@ addon.listen('DATA_READY', function (item)
         displayTooltip(currentInfo);
         return;
       end
+    end
+  end
+end
+
+addon.listen('DATA_READY', function (item)
+  if (currentInfo ~= nil) then
+    for _, node in ipairs(currentInfo) do
+      checkIfNodeQueriedToy(node, item);
     end
   end
 end);
