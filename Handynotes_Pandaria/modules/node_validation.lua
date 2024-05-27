@@ -308,12 +308,18 @@ local function interpreteTreasureInfo (nodeInfo)
   nodeInfo.icon = nodeInfo.icon or ICON_MAP.chest;
   nodeInfo.display = true;
 
-  if (settings.show_treasures == false) then
+  if (settings.show_treasures == false or nodeInfo.collected == true) then
     nodeInfo.display = false;
     return;
   end
 
-  if (nodeInfo.collected == true) then
+  local achievementInfo = nodeInfo.achievementInfo;
+
+  if (settings.show_achievements == true and achievementInfo ~= nil and achievementInfo.completed == false) then
+    return;
+  end
+
+  if (nodeInfo.autoHide == true) then
     nodeInfo.display = false;
     return;
   end
