@@ -385,6 +385,7 @@ local function registerWithHandyNotes ()
   };
 
   HandyNotes:RegisterPluginDB(addonName, handler, options);
+  updateNodes();
 end
 
 function addon.integrateWithHandyNotes ()
