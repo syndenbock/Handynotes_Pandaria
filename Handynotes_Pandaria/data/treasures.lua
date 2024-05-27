@@ -11,7 +11,7 @@ addon.treasureData = {
   },
   [31414] = {
     ["name"] = "Hozen Treasure Cache",
-    ["description"] = "Item with 95g.",
+    ["description"] = "Item with 95g. Inside a cave.",
   },
   [31864] = {
     ["name"] = "Chest of Supplies",
@@ -19,7 +19,7 @@ addon.treasureData = {
   },
   [31415] = {
     ["name"] = "Stolen Sprite Treasure",
-    ["description"] = "Item with ~100g.",
+    ["description"] = "Item with ~100g. At the end of the nearby cave.",
   },
   [31400] = {
     ["name"] = "Ancient Pandaren Tea Pot",
@@ -55,7 +55,7 @@ addon.treasureData = {
   },
   [31420] = {
     ["name"] = "Ancient Mogu Tablet",
-    ["description"] = "Grey item worth 95g.",
+    ["description"] = "Grey item worth 95g. Inside a cave with entrances to the north and south.",
   },
   [31405] = {
     ["name"] = "Virmen Treasure Cache",
@@ -63,15 +63,15 @@ addon.treasureData = {
   },
   [31422] = {
     ["name"] = "Terracotta Head",
-    ["description"] = "Grey item worth 100g.",
+    ["description"] = "Grey item worth 100g. Can spawn in multiple spots in the ruins.",
   },
   [31423] = {
     ["name"] = "Fragment of Dread",
-    ["description"] = "Grey item worth 90g.",
+    ["description"] = "Grey item worth 90g. At a dead end inside the cave to the west.",
   },
   [31408] = {
     ["name"] = "Saurok Stone Tablet",
-    ["description"] = "Grey item worth 100g.",
+    ["description"] = "Grey item worth 100g. Inside the nearby cave.",
   },
   [31424] = {
     ["name"] = "Hardened Sap of Kri'vess",
