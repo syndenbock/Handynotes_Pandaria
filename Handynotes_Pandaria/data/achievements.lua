@@ -113,8 +113,8 @@ end
      check needs to be deferred. ]]
 addon.onOnce('PLAYER_LOGIN', function ()
   if (addon.isPandariaTimerunning()) then
-    local achievementData = addon.achievementData.rares.auto;
-    local timeRunningAchievements = {
+    local achievementData = addon.achievementData;
+    local timeRunningRareAchievements = {
       19993, -- Elusive Foes: The Jade Forest
       19994, -- Elusive Foes: Valley of the Four Winds
       19995, -- Elusive Foes: Krasarang Wilds
@@ -127,8 +127,16 @@ addon.onOnce('PLAYER_LOGIN', function ()
       20069, -- Elusive Foes: Vale of Eternal Blossoms
     };
 
-    for _, achievement in ipairs(timeRunningAchievements) do
-      _G.tinsert(achievementData, achievement);
+    local timeRunningTreasureAchievements = {
+      19982, -- Hidden Treasures: Timeless Isle
+    };
+
+    for _, achievement in ipairs(timeRunningRareAchievements) do
+      _G.tinsert(achievementData.rares.auto, achievement);
+    end
+
+    for _, achievement in ipairs(timeRunningTreasureAchievements) do
+      _G.tinsert(achievementData.treasures.auto, achievement);
     end
   end
 end);

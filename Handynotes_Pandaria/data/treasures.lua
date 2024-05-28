@@ -121,4 +121,34 @@ addon.treasureData = {
     ["description"] = "One of the four artifacts. Can spawn in a lot of places on the isle.",
     ["autoHide"] = true,
   },
+  [220901] = {
+    ["name"] = "Gleaming Treasure Chest",
+    ["description"] = "From the top of the hill to the south jump from pillar to pillar.",
+    ["autoHide"] = true,
+  },
+  [220902] = {
+    ["name"] = "Rope-Bound Treasure Chest",
+    ["description"] = "Start from the rope on the hill at 60/46 and\ncarefully jump from rope to rope.",
+    ["autoHide"] = true,
+  },
+  [220908] = {
+    ["name"] = "Mist-Covered Treasure Chest",
+    ["description"] = "Speak to the Gleaming Crane statue to start the minigame.\nDoable once per week.",
+    ["autoHide"] = true,
+  },
+  [220832] = {
+    ["name"] = "Sunken Treasure",
+    ["description"] = "It's sunken, duh. You get the key from killing mobs around the ship.",
+    ["autoHide"] = true,
+  },
+  [220986] = {
+    ["name"] = "Blackguard's Jetsam",
+    ["description"] = "An underwater chest.",
+    ["autoHide"] = true,
+  },
+  [221036] = {
+    ["name"] = "Gleaming Treasure Satchel",
+    ["description"] = "A bit tricky to reach. Start by climing up the rope near the steering wheel.",
+    ["autoHide"] = true,
+  },
 }
