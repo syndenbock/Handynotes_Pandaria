@@ -344,7 +344,7 @@ local function readTreasureInfo (treasureId)
   end
 
   treasureData.achievementInfo = getAchievementInfo(treasureData);
-  treasureData.collected = IsQuestFlaggedCompleted(treasureId);
+  treasureData.collected = treasureData.quest and IsQuestFlaggedCompleted(treasureData.quest);
   treasureCache[treasureId] = treasureData;
 
   return treasureData;
