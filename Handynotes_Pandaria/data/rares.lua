@@ -4,26 +4,36 @@ addon.rareData = {
   [60491] = {
     name = 'Sha of Anger',
     quest = 32099,
+    mounts = 473,
   },
   [69099] = {
     name = 'Nalak',
     quest = 32518,
+    mounts = 542,
   },
   [62346] = {
     name = 'Galleon',
     quest = 32098,
+    mounts = 515,
   },
   [69161] = {
     name = 'Oondasta',
     quest = 32519,
+    mounts = 533,
   },
   [64403] = {
     name = 'Alani',
-    description = 'Cloud Serpent flying arround the Vale. Needs 10 Sky Crystals to remove immunity.'
+    description = 'Cloud Serpent flying arround the Vale. Needs 10 Sky Crystals to remove immunity.',
+    mounts = 517,
+  },
+  [73167] = {
+    name = 'Huolon',
+    mounts = 561,
   },
   [69769] = {
     name = 'Zandalari Warbringer',
-    description = 'The color of the NPCs mount determines the color of the mount that can drop.',
+    description = 'The color of the NPCs mounts determines the color of the mounts that can drop.',
+    mounts = {534, 535, 536},
   },
   [69768] = {
     name = 'Zandalari Warscout',

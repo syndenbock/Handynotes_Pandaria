@@ -9,33 +9,6 @@ local function parseData ()
   local rareInfo = addon.rareData;
   local treasureInfo = addon.treasureData;
 
-  local function parseMountData ()
-    local mountData = addon.mountData;
-
-    if (mountData == nil) then return end
-
-    for mountId, rareList in pairs(mountData) do
-      if (type(rareList) ~= 'table') then
-        rareList = {rareList};
-      end
-
-      for x = 1, #rareList, 1 do
-        local rareId = rareList[x];
-        local rareData = rareInfo[rareId];
-
-        if (rareData == nil) then
-          rareInfo[rareId] = {mounts = {mountId}};
-        elseif (rareData.mounts == nil) then
-          rareData.mounts = {mountId};
-        else
-          tinsert(rareData.mounts, mountId);
-        end
-      end
-    end
-
-    addon.mountData = nil;
-  end
-
   local function parseToyData ()
     local toyData = addon.toyData;
 
@@ -211,7 +184,6 @@ local function parseData ()
     parseTreasureData();
   end
 
-  parseMountData();
   parseToyData();
   parseAchievementdata();
 

@@ -21,7 +21,6 @@ core\Yell.lua
 data\nodes.lua
 data\rares.lua
 data\treasures.lua
-data\mounts.lua
 data\toys.lua
 data\achievements.lua
 

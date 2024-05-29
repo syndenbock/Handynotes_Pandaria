@@ -177,35 +177,54 @@ local function getToyInfo (rareData)
   };
 end
 
-local function getMountInfo (rareData)
-  local mountList = rareData.mounts;
+local function checkMount (mountId)
+  local mountInfo = {GetMountInfoByID(mountId)};
+  local mountName = mountInfo[1];
+  local icon = mountInfo[3] or ICON_MAP.skullOrange;
+  local collected = mountInfo[11];
 
-  if (mountList == nil) then return nil end
+  if (collected) then
+    mountName = setTextColor(mountName, COLOR_MAP.green);
+  else
+    mountName = setTextColor(mountName, COLOR_MAP.red);
+  end
+
+  return {
+    collected = collected,
+    icon = icon,
+    text = mountName,
+  };
+end
+
+local function getMountInfo (rareData)
+  local mounts = rareData.mounts;
+
+  if (mounts == nil) then return nil end
 
   local list = {};
   local totalCollected = true;
   local totalIcon;
 
-  for x = 1, #mountList, 1 do
-    local mountId = mountList[x];
-    local mountInfo = {GetMountInfoByID(mountId)};
-    local mountName = mountInfo[1];
-    local icon = mountInfo[3] or ICON_MAP.skullOrange;
-    local collected = mountInfo[11];
+  if (type(mounts) == "table") then
+    for index, mountId in ipairs(mounts) do
+      local info = checkMount(mountId);
 
-    if (collected) then
-      mountName = setTextColor(mountName, COLOR_MAP.green);
-    else
-      mountName = setTextColor(mountName, COLOR_MAP.red);
+      if (info.collected == false) then
+        totalCollected = false;
+        totalIcon = totalIcon or info.icon;
+      end
+
+      list[index] = info;
+    end
+  else
+    local info = checkMount(mounts);
+
+    if (info.collected == false) then
       totalCollected = false;
-      totalIcon = totalIcon or icon;
+      totalIcon = totalIcon or info.icon;
     end
 
-    list[x] = {
-      collected = collected,
-      icon = icon,
-      text = mountName,
-    };
+    list[1] = info;
   end
 
   return {
