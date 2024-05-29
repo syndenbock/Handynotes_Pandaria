@@ -183,15 +183,14 @@ do
   local function addTomTomWaypoint(button, mapId, coords)
     if TomTom then
       local x, y = HandyNotes:getXY(coords);
-      local info = infoProvider.getNodeInfo(mapId, coords);
-
-      info = info.rareInfo or info.treasureInfo;
+      local info = infoProvider.getNodeInfo(mapId, coords)[1];
 
       TomTom:AddWaypoint(mapId, x, y, {
         title = info.name;
         persistent = nil,
         minimap = saved.settings.minimap_icons,
         world = true,
+        from = addonName,
       });
     end
   end
