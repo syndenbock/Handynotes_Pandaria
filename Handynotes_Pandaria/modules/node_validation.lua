@@ -63,13 +63,11 @@ local function queryItem (itemId)
   end
 end
 
-local function checkAchievement (achievementData)
-  local achievementId = achievementData.id;
+local function checkAchievement (achievementId, criteriaIndex)
   local achievementInfo = {GetAchievementInfo(achievementId)};
   local text = achievementInfo[2];
   local completed = achievementInfo[4];
   -- local completedOnThisCharacter = achievementInfo[13];
-  local criteriaIndex = achievementData.index;
   local icon = achievementInfo[10];
 
   if (completed) then
@@ -105,6 +103,7 @@ end
 
 local function getAchievementInfo (rareData)
   local achievementList = rareData.achievements;
+  local criteriaList = rareData.criteria;
 
   if (achievementList == nil) then return nil end
 
@@ -112,8 +111,8 @@ local function getAchievementInfo (rareData)
   local totalCompleted = true;
   local totalIcon;
 
-  local function handleAchievement (achievementData, index)
-    local info = checkAchievement(achievementData);
+  local function handleAchievement (achievement, criteria, index)
+    local info = checkAchievement(achievement, criteria);
 
     if (info.completed == false) then
       totalCompleted = false;
@@ -123,13 +122,12 @@ local function getAchievementInfo (rareData)
     list[index] = info;
   end
 
-  -- This is always the case, for now achievements need to be a list
   if (type(achievementList) == 'table') then
-    for index, achievementData in ipairs(achievementList) do
-      handleAchievement(achievementData, index);
+    for index, achievement in ipairs(achievementList) do
+      handleAchievement(achievement, criteriaList[index], index);
     end
   else
-    handleAchievement(achievementList, 1);
+    handleAchievement(achievementList, criteriaList, 1);
   end
 
   return {
