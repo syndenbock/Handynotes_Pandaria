@@ -63,6 +63,46 @@ local function queryItem (itemId)
   end
 end
 
+local function checkAchievement (achievementData)
+  local achievementId = achievementData.id;
+  local achievementInfo = {GetAchievementInfo(achievementId)};
+  local text = achievementInfo[2];
+  local completed = achievementInfo[4];
+  -- local completedOnThisCharacter = achievementInfo[13];
+  local criteriaIndex = achievementData.index;
+  local icon = achievementInfo[10];
+
+  if (completed) then
+    text = setTextColor(text, COLOR_MAP.green);
+  else
+    text = setTextColor(text, COLOR_MAP.red);
+  end
+
+  -- some achievements and their indices are set statically, so we make
+  -- sure the criteria exists
+  if (criteriaIndex > 0 and
+      criteriaIndex <= GetAchievementNumCriteria(achievementId)) then
+    local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
+    local criteria = criteriaInfo[1];
+    local fulfilled = criteriaInfo[3];
+
+    if (fulfilled) then
+      completed = true;
+      criteria = setTextColor(criteria, COLOR_MAP.green);
+    else
+      criteria = setTextColor(criteria, COLOR_MAP.red);
+    end
+
+    text = text .. ' - ' .. criteria;
+  end
+
+  return {
+    completed = completed,
+    text = text,
+    icon = icon,
+  };
+end
+
 local function getAchievementInfo (rareData)
   local achievementList = rareData.achievements;
 
@@ -72,50 +112,24 @@ local function getAchievementInfo (rareData)
   local totalCompleted = true;
   local totalIcon;
 
-  for x = 1, #achievementList, 1 do
-    local achievementData = achievementList[x];
-    local achievementId = achievementData.id;
-    local achievementInfo = {GetAchievementInfo(achievementId)};
-    local text = achievementInfo[2];
-    local completed = achievementInfo[4];
-    -- local completedOnThisCharacter = achievementInfo[13];
-    local criteriaIndex = achievementData.index;
-    local icon = achievementInfo[10];
+  local function handleAchievement (achievementData, index)
+    local info = checkAchievement(achievementData);
 
-    if (completed) then
-      text = setTextColor(text, COLOR_MAP.green);
-    else
-      text = setTextColor(text, COLOR_MAP.red);
-    end
-
-    -- some achievements and their indices are set statically, so we make
-    -- sure the criteria exists
-    if (criteriaIndex > 0 and
-        criteriaIndex <= GetAchievementNumCriteria(achievementId)) then
-      local criteriaInfo = {GetAchievementCriteriaInfo(achievementId, criteriaIndex)};
-      local criteria = criteriaInfo[1];
-      local fulfilled = criteriaInfo[3];
-
-      if (fulfilled) then
-        completed = true;
-        criteria = setTextColor(criteria, COLOR_MAP.green);
-      else
-        criteria = setTextColor(criteria, COLOR_MAP.red);
-      end
-
-      text = text .. ' - ' .. criteria;
-    end
-
-    if (not completed) then
+    if (info.completed == false) then
       totalCompleted = false;
-      totalIcon = totalIcon or icon;
+      totalIcon = totalIcon or info.icon;
     end
 
-    list[x] = {
-      completed = completed,
-      text = text,
-      icon = icon,
-    };
+    list[index] = info;
+  end
+
+  -- This is always the case, for now achievements need to be a list
+  if (type(achievementList) == 'table') then
+    for index, achievementData in ipairs(achievementList) do
+      handleAchievement(achievementData, index);
+    end
+  else
+    handleAchievement(achievementList, 1);
   end
 
   return {
@@ -180,8 +194,8 @@ local function getToyInfo (rareData)
   end
 
   if (type(toyList) == 'table') then
-    for x = 1, #toyList, 1 do
-      handleToy(toyList[x], x);
+    for index, toy in ipairs(toyList) do
+      handleToy(toy, index);
     end
   else
     handleToy(toyList, 1);
@@ -214,34 +228,31 @@ local function checkMount (mountId)
 end
 
 local function getMountInfo (rareData)
-  local mounts = rareData.mounts;
+  local mountList = rareData.mounts;
 
-  if (mounts == nil) then return nil end
+  if (mountList == nil) then return nil end
 
   local list = {};
   local totalCollected = true;
   local totalIcon;
 
-  if (type(mounts) == "table") then
-    for index, mountId in ipairs(mounts) do
-      local info = checkMount(mountId);
-
-      if (info.collected == false) then
-        totalCollected = false;
-        totalIcon = totalIcon or info.icon;
-      end
-
-      list[index] = info;
-    end
-  else
-    local info = checkMount(mounts);
+  local function handleMount (mount, index)
+    local info = checkMount(mount);
 
     if (info.collected == false) then
       totalCollected = false;
       totalIcon = totalIcon or info.icon;
     end
 
-    list[1] = info;
+    list[index] = info;
+  end
+
+  if (type(mountList) == "table") then
+    for index, mountId in ipairs(mountList) do
+      handleMount(mountId, index);
+    end
+  else
+    handleMount(mountList, 1);
   end
 
   return {
