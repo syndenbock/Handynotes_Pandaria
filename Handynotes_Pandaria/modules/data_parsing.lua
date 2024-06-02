@@ -9,33 +9,6 @@ local function parseData ()
   local rareInfo = addon.rareData;
   local treasureInfo = addon.treasureData;
 
-  local function parseToyData ()
-    local toyData = addon.toyData;
-
-    if (toyData == nil) then return end
-
-    for toyId, rareList in pairs(toyData) do
-      if (type(rareList) ~= 'table') then
-        rareList = {rareList};
-      end
-
-      for x = 1, #rareList, 1 do
-        local rareId = rareList[x];
-        local rareData = rareInfo[rareId];
-
-        if (rareData == nil) then
-          rareInfo[rareId] = {toys = {toyId}};
-        elseif (rareData.toys == nil) then
-          rareData.toys = {toyId};
-        else
-          tinsert(rareData.toys, toyId);
-        end
-      end
-    end
-
-    addon.toyData = nil;
-  end
-
   local function parseAchievementdata ()
     local achievementData = addon.achievementData;
 
@@ -184,7 +157,6 @@ local function parseData ()
     parseTreasureData();
   end
 
-  parseToyData();
   parseAchievementdata();
 
   addon.achievementData = nil;

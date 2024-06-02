@@ -125,6 +125,40 @@ local function getAchievementInfo (rareData)
   };
 end
 
+local function checkToy (toy)
+  local collected = PlayerHasToy(toy);
+  local toyName;
+  local icon;
+  local queried;
+
+  -- data is not cached yet
+  if (IsItemDataCachedByID(toy)) then
+    local toyInfo = {GetItemInfo(toy)};
+
+    toyName = toyInfo[1];
+    icon = toyInfo[10] or ICON_MAP.skullGreen;
+  else
+    toyName = 'waiting for data...';
+    icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
+    queried = toy;
+    queryItem(toy);
+  end
+
+  if (collected) then
+    toyName = setTextColor(toyName, COLOR_MAP.green);
+  else
+    toyName = setTextColor(toyName, COLOR_MAP.red);
+  end
+
+  return {
+    text = toyName,
+    name = toyName,
+    icon = icon,
+    collected = collected,
+    queried = queried,
+  };
+end
+
 local function getToyInfo (rareData)
   local toyList = rareData.toys;
 
@@ -134,40 +168,23 @@ local function getToyInfo (rareData)
   local totalCollected = true;
   local totalIcon;
 
-  for x = 1, #toyList, 1 do
-    local toy = toyList[x];
-    local collected = PlayerHasToy(toy);
-    local toyName;
-    local icon;
-    local queried;
+  local function handleToy (toy, index)
+    local info = checkToy(toy);
 
-    -- data is not cached yet
-    if (IsItemDataCachedByID(toy)) then
-      local toyInfo = {GetItemInfo(toy)};
-
-      toyName = toyInfo[1];
-      icon = toyInfo[10] or ICON_MAP.skullGreen;
-    else
-      toyName = 'waiting for data...';
-      icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
-      queried = toy;
-      queryItem(toy);
-    end
-
-    if (collected) then
-      toyName = setTextColor(toyName, COLOR_MAP.green);
-    else
-      toyName = setTextColor(toyName, COLOR_MAP.red);
+    if (info.collected == false) then
       totalCollected = false;
-      totalIcon = totalIcon or icon;
+      totalIcon = totalIcon or info.icon;
     end
 
-    list[x] = {
-      text = toyName,
-      name = toyName,
-      collected = collected,
-      queried = queried,
-    };
+    list[index] = info;
+  end
+
+  if (type(toyList) == 'table') then
+    for x = 1, #toyList, 1 do
+      handleToy(toyList[x], x);
+    end
+  else
+    handleToy(toyList, 1);
   end
 
   return {
