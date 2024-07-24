@@ -1,2 +1,2 @@
-- Added "Hidden Treasures: Timeless Isle" treasures
-- Fixed adding TomTom waypoints
+- Updated interface version for Retail 11.0
+- Some code improvements
