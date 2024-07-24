@@ -1,4 +1,4 @@
-## Interface: 100207
+## Interface: 110000
 ## Title: Handynotes Pandaria
 ## X-Curse-Project-ID: 352950
 ## Version: 1.7.1
