@@ -1,2 +1,2 @@
-- Updated interface version for Retail 11.0
-- Some code improvements
+- Fixed compatibility with 11.0.2
+- Updated interface version for 11.0.2
