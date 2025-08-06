@@ -25,8 +25,9 @@ jobs:
     steps:
       # we first have to clone the AddOn project, this is a required step
       - name: Clone project
-        uses: actions/checkout@master  # note: checkout@v2 breaks git history, so generating a changelog and
-                                   # file naming for non-tagged builds will not work properly
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0  # gets entire git history, needed for automatic changelogs
 
       # Release retail
       - name: Release Retail
