@@ -1,4 +1,4 @@
-package-as: Handynotes_Pandaria
+package-as: HandyNotes_Pandaria
 
 manual-changelog:
   filename: CHANGELOG.md
@@ -8,7 +8,7 @@ ignore:
   - .gitignore
   - Icon.jpg
   - CHANGELOG.md
-  - Handynotes_Pandaria/CHANGELOG.md
+  - HandyNotes_Pandaria/CHANGELOG.md
 
 move-folders:
-  Handynotes_Pandaria/Handynotes_Pandaria: Handynotes_Pandaria
+  HandyNotes_Pandaria/HandyNotes_Pandaria: HandyNotes_Pandaria
