@@ -1,5 +1,5 @@
 ## Interface: 110200
-## Interface-Mists: 50500
+## Interface-Mists: 50501
 ## Title: HandyNotes: Pandaria
 ## X-Curse-Project-ID: 352950
 ## Version: 1.8.8
