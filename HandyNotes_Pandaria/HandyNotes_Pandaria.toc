@@ -1,5 +1,5 @@
 ## Interface: 120005
-## Interface-Mists: 50502
+## Interface-Mists: 50504
 
 ## Title: HandyNotes: Pandaria
 ## Author: syndenbock
