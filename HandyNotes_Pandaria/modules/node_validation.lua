@@ -5,8 +5,9 @@ local tinsert = _G.tinsert;
 local GetAchievementCriteriaInfo = _G.GetAchievementCriteriaInfo;
 local GetAchievementInfo = _G.GetAchievementInfo;
 local GetAchievementNumCriteria = _G.GetAchievementNumCriteria;
-local GetItemIcon = _G.GetItemIcon;
-local GetItemInfo = _G.GetItemInfo;
+local GetItemIcon = _G.C_Item.GetItemIcon;
+local GetItemInfo = _G.C_Item.GetItemInfo;
+local GetItemInfoInstant = _G.C_Item.GetItemInfoInstant;
 local GetMountInfoByID = _G.C_MountJournal.GetMountInfoByID;
 local IsItemDataCachedByID = _G.C_Item.IsItemDataCachedByID;
 local IsQuestFlaggedCompleted = _G.C_QuestLog.IsQuestFlaggedCompleted;
@@ -138,6 +139,10 @@ local function getAchievementInfo (rareData)
 end
 
 local function checkToy (toy)
+  if (GetItemInfoInstant(toy) == nil) then
+    return nil;
+  end
+
   local collected = PlayerHasToy(toy);
   local toyName;
   local icon;
@@ -180,23 +185,29 @@ local function getToyInfo (rareData)
   local totalCollected = true;
   local totalIcon;
 
-  local function handleToy (toy, index)
+  local function handleToy (toy)
     local info = checkToy(toy);
 
-    if (info.collected == false) then
-      totalCollected = false;
-      totalIcon = totalIcon or info.icon;
-    end
+    if (info ~= nil) then
+      if (info.collected == false) then
+        totalCollected = false;
+        totalIcon = totalIcon or info.icon;
+      end
 
-    list[index] = info;
+      tinsert(list, info);
+    end
   end
 
   if (type(toyList) == 'table') then
-    for index, toy in ipairs(toyList) do
-      handleToy(toy, index);
+    for _, toy in ipairs(toyList) do
+      handleToy(toy);
     end
   else
-    handleToy(toyList, 1);
+    handleToy(toyList);
+  end
+
+  if (#list <= 0) then
+    return nil;
   end
 
   return {
