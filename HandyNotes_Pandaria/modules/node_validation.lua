@@ -5,7 +5,7 @@ local tinsert = _G.tinsert;
 local GetAchievementCriteriaInfo = _G.GetAchievementCriteriaInfo;
 local GetAchievementInfo = _G.GetAchievementInfo;
 local GetAchievementNumCriteria = _G.GetAchievementNumCriteria;
-local GetItemIcon = _G.C_Item.GetItemIcon;
+local GetItemIconByID = _G.C_Item.GetItemIconByID;
 local GetItemInfo = _G.C_Item.GetItemInfo;
 local GetItemInfoInstant = _G.C_Item.GetItemInfoInstant;
 local GetMountInfoByID = _G.C_MountJournal.GetMountInfoByID;
@@ -138,27 +138,27 @@ local function getAchievementInfo (rareData)
   };
 end
 
-local function checkToy (toy)
-  if (GetItemInfoInstant(toy) == nil) then
+local function checkToy (toy_id)
+  if (GetItemInfoInstant(toy_id) == nil) then
     return nil;
   end
 
-  local collected = PlayerHasToy(toy);
+  local collected = PlayerHasToy(toy_id);
   local toyName;
   local icon;
   local queried;
 
   -- data is not cached yet
-  if (IsItemDataCachedByID(toy)) then
-    local toyInfo = {GetItemInfo(toy)};
+  if (IsItemDataCachedByID(toy_id)) then
+    local toyInfo = {GetItemInfo(toy_id)};
 
     toyName = toyInfo[1];
     icon = toyInfo[10] or ICON_MAP.skullGreen;
   else
     toyName = 'waiting for data...';
-    icon = GetItemIcon(toy) or ICON_MAP.skullGreen;
-    queried = toy;
-    queryItem(toy);
+    icon = GetItemIconByID(toy_id) or ICON_MAP.skullGreen;
+    queried = toy_id;
+    queryItem(toy_id);
   end
 
   if (collected) then
@@ -177,16 +177,16 @@ local function checkToy (toy)
 end
 
 local function getToyInfo (rareData)
-  local toyList = rareData.toys;
+  local toy_id_list = rareData.toys;
 
-  if (toyList == nil) then return nil end
+  if (toy_id_list == nil) then return nil end
 
   local list = {};
   local totalCollected = true;
   local totalIcon;
 
-  local function handleToy (toy)
-    local info = checkToy(toy);
+  local function handleToy (toy_id)
+    local info = checkToy(toy_id);
 
     if (info ~= nil) then
       if (info.collected == false) then
@@ -198,12 +198,12 @@ local function getToyInfo (rareData)
     end
   end
 
-  if (type(toyList) == 'table') then
-    for _, toy in ipairs(toyList) do
-      handleToy(toy);
+  if (type(toy_id_list) == 'table') then
+    for _, toy_id in ipairs(toy_id_list) do
+      handleToy(toy_id);
     end
   else
-    handleToy(toyList);
+    handleToy(toy_id_list);
   end
 
   if (#list <= 0) then
