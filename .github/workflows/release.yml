@@ -5,7 +5,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     tags:
-    - '**'
+    - '*'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -32,3 +32,5 @@ jobs:
       # Release retail
       - name: Release Retail
         uses: BigWigsMods/packager@v2
+        with:
+          args: -S
